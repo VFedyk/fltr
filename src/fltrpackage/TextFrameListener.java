@@ -175,25 +175,27 @@ public class TextFrameListener
 				frame.getTextPanel().repaint();
 				frame.getTextPanel().requestFocus();
 			} else if (((String) mi.getClientProperty("action")).equals("knowall")) {
-				TermStatus ts = (TermStatus) mi.getClientProperty("status");
-				Text t = FLTR.getText();
-				for (TextItem ti : t.getTextItems()) {
-					if (ti.getLink() == null) {
-						String s = ti.getTextItemValue().replace(Constants.PARAGRAPH_MARKER, "");
-						if ((!s.isEmpty()) && (terms.getTermFromKey(s.toLowerCase()) == null)) {
-							int index = t.getTextItems().indexOf(ti);
-							t.setMarkIndexStart(index);
-							t.setMarkIndexEnd(index);
-							t.setRangeMarked(true);
-							terms.addTerm(
-									new Term(s, "", t.getMarkedTextSentence(s).replace(Constants.PARAGRAPH_MARKER, ""),
-											"", ts.getStatusCode()));
+				if (Utilities.showYesNoQuestion("I KNOW ALL! - Really? Are you sure?", false)) {
+					TermStatus ts = (TermStatus) mi.getClientProperty("status");
+					Text t = FLTR.getText();
+					for (TextItem ti : t.getTextItems()) {
+						if (ti.getLink() == null) {
+							String s = ti.getTextItemValue().replace(Constants.PARAGRAPH_MARKER, "");
+							if ((!s.isEmpty()) && (terms.getTermFromKey(s.toLowerCase()) == null)) {
+								int index = t.getTextItems().indexOf(ti);
+								t.setMarkIndexStart(index);
+								t.setMarkIndexEnd(index);
+								t.setRangeMarked(true);
+								terms.addTerm(new Term(s, "",
+										t.getMarkedTextSentence(s).replace(Constants.PARAGRAPH_MARKER, ""), "",
+										ts.getStatusCode()));
+							}
 						}
 					}
+					FLTR.getText().matchWithTerms();
+					frame.getTextPanel().repaint();
+					frame.getTextPanel().requestFocus();
 				}
-				FLTR.getText().matchWithTerms();
-				frame.getTextPanel().repaint();
-				frame.getTextPanel().requestFocus();
 			}
 		}
 	}
@@ -423,6 +425,12 @@ public class TextFrameListener
 			termFrame.setVisible(false);
 			termFrame.dispose();
 			FLTR.setTermFrame(null);
+		}
+		ResultFrame resultFrame = FLTR.getResultFrame();
+		if (resultFrame != null) {
+			resultFrame.setVisible(false);
+			resultFrame.dispose();
+			FLTR.setResultFrame(null);
 		}
 
 		frame.setVisible(false);

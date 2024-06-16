@@ -116,17 +116,17 @@ public class TermFrame extends JFrame {
 		Language lang = FLTR.getLanguage();
 
 		butLookup1 = new JButton("Dict1");
-		butLookup1.setEnabled(lang.isURLset(1));
+		butLookup1.setEnabled(lang.isURLset(1) || lang.isShellCommandSet(1));
 		butLookup1.addActionListener(listener);
 		mainPanel.add(butLookup1, "split 4, right");
 
 		butLookup2 = new JButton("Dict2");
-		butLookup2.setEnabled(lang.isURLset(2));
+		butLookup2.setEnabled(lang.isURLset(2) || lang.isShellCommandSet(2));
 		butLookup2.addActionListener(listener);
 		mainPanel.add(butLookup2, "center");
 
 		butLookup3 = new JButton("Dict3");
-		butLookup3.setEnabled(lang.isURLset(3));
+		butLookup3.setEnabled(lang.isURLset(3) || lang.isShellCommandSet(3));
 		butLookup3.addActionListener(listener);
 		mainPanel.add(butLookup3, "left");
 

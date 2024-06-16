@@ -109,12 +109,20 @@ public class FLTR {
 		return FLTR.instance.baseDir;
 	}
 
+	public static RunExternalAppTask getExtTask() {
+		return FLTR.instance.extTask;
+	}
+
 	public static LanguageDefinitions getLangDefs() {
 		return FLTR.instance.langDefs;
 	}
 
 	public static Language getLanguage() {
 		return FLTR.instance.language;
+	}
+
+	public static ResultFrame getResultFrame() {
+		return FLTR.instance.resultFrame;
 	}
 
 	public static StartFrame getStartFrame() {
@@ -141,8 +149,16 @@ public class FLTR {
 		FLTR.instance.baseDir = baseDir;
 	}
 
+	public static void setExtTask(RunExternalAppTask extTask) {
+		FLTR.instance.extTask = extTask;
+	}
+
 	public static void setLanguage(Language language) {
 		FLTR.instance.language = language;
+	}
+
+	public static void setResultFrame(ResultFrame resultFrame) {
+		FLTR.instance.resultFrame = resultFrame;
 	}
 
 	public static void setStartFrame(StartFrame startFrame) {
@@ -171,7 +187,11 @@ public class FLTR {
 
 	private StartFrame startFrame;
 	private TextFrame textFrame;
+
 	private TermFrame termFrame;
+
+	private ResultFrame resultFrame;
+
 	private Text text;
 
 	private Language language;
@@ -182,10 +202,14 @@ public class FLTR {
 
 	private File baseDir;
 
+	private RunExternalAppTask extTask;
+
 	private FLTR() {
 		langDefs = new LanguageDefinitions();
 		textFrame = null;
 		termFrame = null;
+		resultFrame = null;
+		extTask = null;
 		text = null;
 		language = null;
 		terms = null;

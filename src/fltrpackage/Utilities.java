@@ -32,6 +32,7 @@ import java.awt.ComponentOrientation;
 import java.awt.Desktop;
 import java.awt.FileDialog;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.io.BufferedReader;
@@ -286,12 +287,25 @@ public class Utilities {
 		return (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0);
 	}
 
+	public static boolean isWin() {
+		return (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0);
+	}
+
 	public static String leftTrim(String s) {
 		int i = 0;
 		while ((i < s.length()) && Character.isWhitespace(s.charAt(i))) {
 			i++;
 		}
 		return s.substring(i);
+	}
+
+	public static String limitStringLeft(int max, String s) {
+		int l = s.length();
+		if (l > (max - 2)) {
+			return s.substring(0, max - 2) + " …";
+		} else {
+			return s;
+		}
 	}
 
 	public static String limitStringRight(int max, String s) {
@@ -433,6 +447,27 @@ public class Utilities {
 
 	public static String reverseString(String s) {
 		return (new StringBuffer(s)).reverse().toString();
+	}
+
+	public static void runShellCommand(String command, String searchword) {
+		if (FLTR.getExtTask() != null) {
+			ResultFrame rf = FLTR.getResultFrame();
+			if (rf != null) {
+				if (rf.getProcess() != null) {
+					rf.setVisible(true);
+					rf.setState(Frame.NORMAL);
+					showErrorMessage("Not possible - another external dictionary\nlookup program is still running!");
+					return;
+				}
+			}
+		}
+		FLTR.setExtTask(null);
+		FLTR.setExtTask(new RunExternalAppTask(command, searchword));
+		if (FLTR.getExtTask() != null) {
+			FLTR.getExtTask().execute();
+		} else {
+			showErrorMessage("Unable to run external dictionary lookup program!");
+		}
 	}
 
 	public static File saveFileDialog(JFrame frame, String title, String initialDirectoryPath) {

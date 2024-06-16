@@ -245,9 +245,6 @@ public class Language {
 	}
 
 	public String getURLHost(int linkNo) {
-		if (!isURLset(linkNo)) {
-			return "";
-		}
 		String u = "";
 		if (linkNo == 1) {
 			u = getDictionaryURL1();
@@ -256,9 +253,16 @@ public class Language {
 		} else if (linkNo == 3) {
 			u = getDictionaryURL3();
 		}
+		u = u.trim();
+		if (isShellCommandSet(linkNo)) {
+			return Utilities.limitStringLeft(25, u);
+		}
+		if (!isURLset(linkNo)) {
+			return "";
+		}
 		try {
 			URL url = new URL(u);
-			return url.getHost();
+			return Utilities.limitStringLeft(25, url.getHost());
 		} catch (Exception ex) {
 			return "";
 		}
@@ -280,6 +284,19 @@ public class Language {
 		return getPref(Language.KEYwordEncodingURL3, Language.DFTwordEncodingURL3);
 	}
 
+	public boolean isShellCommandSet(int linkNo) {
+		String URL = "";
+		if (linkNo == 1) {
+			URL = getDictionaryURL1();
+		} else if (linkNo == 2) {
+			URL = getDictionaryURL2();
+		} else if (linkNo == 3) {
+			URL = getDictionaryURL3();
+		}
+		boolean website = (URL.startsWith(Constants.URL_BEGIN_1) || URL.startsWith(Constants.URL_BEGIN_2));
+		return (!website) && (!URL.trim().equals(""));
+	}
+
 	public boolean isURLset(int linkNo) {
 		String URL = "";
 		if (linkNo == 1) {
@@ -289,13 +306,11 @@ public class Language {
 		} else if (linkNo == 3) {
 			URL = getDictionaryURL3();
 		}
+		URL = URL.trim();
 		return (URL.startsWith(Constants.URL_BEGIN_1) || URL.startsWith(Constants.URL_BEGIN_2));
 	}
 
 	public void lookupWordInBrowser(String word, int linkNo, boolean always) {
-		if (!isURLset(linkNo)) {
-			return;
-		}
 		String URL = "";
 		String encoding = "";
 		boolean autoOpen = false;
@@ -311,6 +326,21 @@ public class Language {
 			URL = getDictionaryURL3();
 			encoding = getWordEncodingURL3();
 			autoOpen = getOpenAutomaticallyURL3();
+		}
+		if (isShellCommandSet(linkNo)) {
+			if (always || autoOpen) {
+				ResultFrame resultFrame = FLTR.getResultFrame();
+				if (resultFrame == null) {
+					resultFrame = new ResultFrame();
+					FLTR.setResultFrame(resultFrame);
+				}
+				resultFrame.setVisible(true);
+				Utilities.runShellCommand(URL.trim(), word.trim());
+			}
+			return;
+		}
+		if (!isURLset(linkNo)) {
+			return;
 		}
 		try {
 			if (always || autoOpen) {

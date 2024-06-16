@@ -30,14 +30,17 @@ package fltrpackage;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class MultiLineTextFieldListener implements KeyListener, DocumentListener {
+public class MultiLineTextFieldListener implements KeyListener, DocumentListener, MouseListener {
 
 	private JFrame frame;
 
@@ -89,6 +92,45 @@ public class MultiLineTextFieldListener implements KeyListener, DocumentListener
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		if (frame instanceof ResultFrame) {
+			if (SwingUtilities.isMiddleMouseButton(arg0)) {
+				String text = ((ResultFrame) frame).getTfResults().getTextArea().getSelectedText().trim();
+				if (!text.equals("")) {
+					TermFrame termFrame = FLTR.getTermFrame();
+					if (termFrame != null) {
+						if (termFrame.isVisible()) {
+							String currTrans = termFrame.getTfTranslation().getTextArea().getText();
+							if (currTrans.equals("")) {
+								termFrame.getTfTranslation().getTextArea().setText(text);
+							} else {
+								termFrame.getTfTranslation().getTextArea().setText(currTrans + ", " + text);
+							}
+							termFrame.getButSave().doClick();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
 	}
 
 	@Override

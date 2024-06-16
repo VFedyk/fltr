@@ -55,10 +55,12 @@ public class MultiLineTextField {
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
 		AbstractDocument doc = (AbstractDocument) textArea.getDocument();
-		doc.setDocumentFilter(new TextFieldCharLimiter(maxChar));
+		if (maxChar > 0)
+			doc.setDocumentFilter(new TextFieldCharLimiter(maxChar));
 		MultiLineTextFieldListener listener = new MultiLineTextFieldListener(frame);
 		doc.addDocumentListener(listener);
 		textArea.addKeyListener(listener);
+		textArea.addMouseListener(listener);
 		JPopupMenu popupMenu = new JPopupMenu();
 		if (editable) {
 			Action paste = new DefaultEditorKit.PasteAction();

@@ -66,7 +66,7 @@ public class GeneralSettingsDialog extends JDialog {
 		settingsTableModel = new GeneralSettingsTableModel();
 		settingsTable = new JTable(settingsTableModel);
 		settingsTable.setPreferredScrollableViewportSize(
-				new Dimension(Preferences.scaleIntValue(300), Preferences.scaleIntValue(250)));
+				new Dimension(Preferences.scaleIntValue(300), Preferences.scaleIntValue(270)));
 		settingsTable.setFillsViewportHeight(true);
 		settingsTable.getTableHeader().setReorderingAllowed(false);
 		settingsTable.getColumnModel().getColumn(1).setPreferredWidth(Preferences.scaleIntValue(125));

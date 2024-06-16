@@ -29,8 +29,8 @@ package fltrpackage;
 
 public class Constants {
 
-	public static final String SHORT_VERSION = "1.2.0";
-	public static final String VERSION = Constants.SHORT_VERSION + " (2021-05-30)";
+	public static final String SHORT_VERSION = "1.3.0";
+	public static final String VERSION = Constants.SHORT_VERSION + " (2021-06-09)";
 
 	public static final String SHORT_NAME = "FLTR";
 	public static final String LONG_NAME = "Foreign Language Text Reader";
@@ -74,6 +74,7 @@ public class Constants {
 	public static final String TERMS_SEPARATOR = " · ";
 	public static final String URL_BEGIN_1 = "http://";
 	public static final String URL_BEGIN_2 = "https://";
+	public static final String EXEC_NOWAIT_END_MARKER = "&"; // Shell command (not-waiting)
 	public static final String TERM_PLACEHOLDER = "###";
 
 }

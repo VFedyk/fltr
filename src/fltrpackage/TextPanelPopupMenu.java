@@ -79,7 +79,7 @@ public class TextPanelPopupMenu extends JPopupMenu {
 		int count = 0;
 		Language lang = FLTR.getLanguage();
 		for (int i = 1; i <= 3; i++) {
-			if (lang.isURLset(i)) {
+			if (lang.isURLset(i) || lang.isShellCommandSet(i)) {
 				String host = lang.getURLHost(i);
 				if (!host.isEmpty()) {
 					host = " (" + host + ")";

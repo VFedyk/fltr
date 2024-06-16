@@ -126,6 +126,10 @@ public class Preferences {
 		return Preferences.getBoolPreference("currPopupMenusNested", false);
 	}
 
+	public static int getCurrResultLines() {
+		return Preferences.getIntPreference("currResultLines", 15);
+	}
+
 	public static String getCurrText() {
 		return Preferences.getPreference("currText", "[None]");
 	}
@@ -154,6 +158,10 @@ public class Preferences {
 		return Preferences.getIntPreference("currWidthTextPanel", 600);
 	}
 
+	public static int getCurrXPosResultWindow(int dft) {
+		return Preferences.getIntPreference("currXPosResultWindow", dft);
+	}
+
 	public static int getCurrXPosStartWindow(int dft) {
 		return Preferences.getIntPreference("currXPosStartWindow", dft);
 	}
@@ -164,6 +172,10 @@ public class Preferences {
 
 	public static int getCurrXPosTextWindow(int dft) {
 		return Preferences.getIntPreference("currXPosTextWindow", dft);
+	}
+
+	public static int getCurrYPosResultWindow(int dft) {
+		return Preferences.getIntPreference("currYPosResultWindow", dft);
 	}
 
 	public static int getCurrYPosStartWindow(int dft) {
@@ -279,6 +291,10 @@ public class Preferences {
 		Preferences.putBoolPreference("currPopupMenusNested", b);
 	}
 
+	public static void putCurrResultLines(int i) {
+		Preferences.putIntPreference("currResultLines", i);
+	}
+
 	public static void putCurrText(String s) {
 		Preferences.putPreference("currText", s);
 	}
@@ -307,6 +323,10 @@ public class Preferences {
 		Preferences.putIntPreference("currWidthTextPanel", i);
 	}
 
+	public static void putCurrXPosResultWindow(int i) {
+		Preferences.putIntPreference("currXPosResultWindow", i);
+	}
+
 	public static void putCurrXPosStartWindow(int i) {
 		Preferences.putIntPreference("currXPosStartWindow", i);
 	}
@@ -317,6 +337,10 @@ public class Preferences {
 
 	public static void putCurrXPosTextWindow(int i) {
 		Preferences.putIntPreference("currXPosTextWindow", i);
+	}
+
+	public static void putCurrYPosResultWindow(int i) {
+		Preferences.putIntPreference("currYPosResultWindow", i);
 	}
 
 	public static void putCurrYPosStartWindow(int i) {

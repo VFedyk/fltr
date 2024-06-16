@@ -53,7 +53,7 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return 14;
+		return 15;
 	}
 
 	@Override
@@ -88,6 +88,8 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 				return "ColorWellKnown";
 			case 13:
 				return "MaxSimilarTerms";
+			case 14:
+				return "ResultLines";
 			default:
 				return "???";
 			}
@@ -121,6 +123,8 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 				return Preferences.getCurrColorWellKnown();
 			case 13:
 				return Preferences.getCurrMaxSimTerms();
+			case 14:
+				return Preferences.getCurrResultLines();
 			default:
 				return "???";
 			}
@@ -157,6 +161,9 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 			case 13:
 				v = 3;
 				break;
+			case 14:
+				v = 15;
+				break;
 			default:
 				v = 0;
 			}
@@ -179,7 +186,7 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 			break;
 		case 3:
 			if ((v < 75) || (v > 150)) {
-				Utilities.showInfoMessage("Wrong Value.\nAllowed Range: 75 ... 150 %.\nSet to default: 100 %.");
+				Utilities.showInfoMessage("Wrong Value.\nAllowed Range: 75 … 150 %.\nSet to default: 100 %.");
 				v = 100;
 			}
 			if (Preferences.getCurrLookAndFeel().equals("nimbus") && (v != 100)) {
@@ -235,6 +242,15 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 				v = 10;
 			}
 			Preferences.putCurrMaxSimTerms(v);
+			break;
+		case 14:
+			if (v < 5) {
+				v = 5;
+			}
+			if (v > 50) {
+				v = 50;
+			}
+			Preferences.putCurrResultLines(v);
 			break;
 		}
 	}
