@@ -2,7 +2,7 @@
  *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
  *
- * Copyright © 2012-2020 FLTR Developers et al.
+ * Copyright © 2012-2021 FLTR Developers et al.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -266,6 +266,11 @@ public class TextPanelPopupMenu extends JPopupMenu {
 			createAndAddMenuItem(this, "Add " + String.valueOf(missSent) + " missing Sentences in existent Terms",
 					"miss", "", null, "", null);
 		}
+		this.add(new JSeparator());
+		createAndAddMenuItem(this, "Save All " + FLTR.getLanguage().getLangName() + " Terms…", "saveterms", "", null,
+				"", null);
+		createAndAddMenuItem(this, "Export All " + FLTR.getLanguage().getLangName() + " Terms…", "exportterms", "",
+				null, "", null);
 	}
 
 }

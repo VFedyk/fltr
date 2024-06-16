@@ -2,7 +2,7 @@
  *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
  *
- * Copyright © 2012-2020 FLTR Developers et al.
+ * Copyright © 2012-2021 FLTR Developers et al.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -29,13 +29,13 @@ package fltrpackage;
 
 public class Constants {
 
-	public static final String SHORT_VERSION = "1.0.0";
-	public static final String VERSION = Constants.SHORT_VERSION + " (2020-10-03)";
+	public static final String SHORT_VERSION = "1.1.0";
+	public static final String VERSION = Constants.SHORT_VERSION + " (2021-05-25)";
 
 	public static final String SHORT_NAME = "FLTR";
 	public static final String LONG_NAME = "Foreign Language Text Reader";
 	public static final String WEBSITE = "https://sourceforge.net/projects/foreign-language-text-reader/";
-	public static final String COPYRIGHT = "Copyright © 2012-2020 " + Constants.SHORT_NAME + " Developers et al.";
+	public static final String COPYRIGHT = "Copyright © 2012-2021 " + Constants.SHORT_NAME + " Developers et al.";
 
 	public static final String ICONPATH = "/fltrpackage/icon128.png";
 	public static final String HEADER_HTML_PATH = "/fltrpackage/_Header.htm";
@@ -62,6 +62,7 @@ public class Constants {
 	public static final int MAX_TEXT_LENGTH_START_FRAME = 30;
 	public static final int MAX_LANG_LENGTH_START_FRAME = 30;
 
+	// Not used
 	public static final int MAX_SIMILAR_TERMS = 10;
 	public static final int MAX_SIMILAR_TERMS_LENGTH = 45;
 	public static final double FUZZY_THRESHOLD = 0.333;

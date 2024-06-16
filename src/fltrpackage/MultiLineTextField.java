@@ -2,7 +2,7 @@
  *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
  *
- * Copyright © 2012-2020 FLTR Developers et al.
+ * Copyright © 2012-2021 FLTR Developers et al.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -27,12 +27,15 @@
 
 package fltrpackage;
 
+import javax.swing.Action;
 import javax.swing.JFrame;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.text.AbstractDocument;
+import javax.swing.text.DefaultEditorKit;
 
 public class MultiLineTextField {
 
@@ -49,7 +52,20 @@ public class MultiLineTextField {
 		textArea.setWrapStyleWord(true);
 		AbstractDocument doc = (AbstractDocument) textArea.getDocument();
 		doc.setDocumentFilter(new TextFieldCharLimiter(maxChar));
-		textArea.addKeyListener(new MultiLineTextFieldListener(frame));
+		MultiLineTextFieldListener listener = new MultiLineTextFieldListener(frame);
+		doc.addDocumentListener(listener);
+		textArea.addKeyListener(listener);
+		JPopupMenu popupMenu = new JPopupMenu();
+		Action paste = new DefaultEditorKit.PasteAction();
+		paste.putValue(Action.NAME, "Paste");
+		popupMenu.add(paste);
+		Action copy = new DefaultEditorKit.CopyAction();
+		copy.putValue(Action.NAME, "Copy");
+		popupMenu.add(copy);
+		Action cut = new DefaultEditorKit.CutAction();
+		cut.putValue(Action.NAME, "Cut");
+		popupMenu.add(cut);
+		textArea.setComponentPopupMenu(popupMenu);
 		textAreaScrollPane = new JScrollPane(textArea);
 		textAreaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 	}

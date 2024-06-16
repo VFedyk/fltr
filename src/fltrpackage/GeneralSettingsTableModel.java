@@ -2,7 +2,7 @@
  *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
  *
- * Copyright © 2012-2020 FLTR Developers et al.
+ * Copyright © 2012-2021 FLTR Developers et al.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -53,7 +53,7 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return 5;
+		return 13;
 	}
 
 	@Override
@@ -70,6 +70,22 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 				return "DialogFontSize%";
 			case 4:
 				return "LookAndFeel";
+			case 5:
+				return "ColorNew";
+			case 6:
+				return "ColorUnknown1";
+			case 7:
+				return "ColorLearning2";
+			case 8:
+				return "ColorLearning3";
+			case 9:
+				return "ColorLearning4";
+			case 10:
+				return "ColorKnown5";
+			case 11:
+				return "ColorIgnored";
+			case 12:
+				return "ColorWellKnown";
 			default:
 				return "???";
 			}
@@ -85,6 +101,22 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 				return Preferences.getCurrDialogFontSizePercent();
 			case 4:
 				return Preferences.getCurrLookAndFeel();
+			case 5:
+				return Preferences.getCurrColorNew();
+			case 6:
+				return Preferences.getCurrColorUnknown();
+			case 7:
+				return Preferences.getCurrColorLearning2();
+			case 8:
+				return Preferences.getCurrColorLearning3();
+			case 9:
+				return Preferences.getCurrColorLearning4();
+			case 10:
+				return Preferences.getCurrColorKnown();
+			case 11:
+				return Preferences.getCurrColorIgnored();
+			case 12:
+				return Preferences.getCurrColorWellKnown();
 			default:
 				return "???";
 			}
@@ -163,6 +195,30 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 				Preferences.putCurrLookAndFeel("system");
 			}
 			Utilities.showInfoMessage("Look & Feel Change will take effect after Restart of the Program.");
+			break;
+		case 5:
+			Preferences.putCurrColorNew((String) value);
+			break;
+		case 6:
+			Preferences.putCurrColorUnknown((String) value);
+			break;
+		case 7:
+			Preferences.putCurrColorLearning2((String) value);
+			break;
+		case 8:
+			Preferences.putCurrColorLearning3((String) value);
+			break;
+		case 9:
+			Preferences.putCurrColorLearning4((String) value);
+			break;
+		case 10:
+			Preferences.putCurrColorKnown((String) value);
+			break;
+		case 11:
+			Preferences.putCurrColorIgnored((String) value);
+			break;
+		case 12:
+			Preferences.putCurrColorWellKnown((String) value);
 			break;
 		}
 	}

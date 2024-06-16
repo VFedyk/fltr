@@ -2,7 +2,7 @@
  *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
  *
- * Copyright © 2012-2020 FLTR Developers et al.
+ * Copyright © 2012-2021 FLTR Developers et al.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -30,12 +30,12 @@ package fltrpackage;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.util.ArrayList;
-import java.util.Vector;
+//import java.util.ArrayList;
+//import java.util.Vector;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+//import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -53,7 +53,7 @@ public class TermFrame extends JFrame {
 	private MultiLineTextField tfRomanization;
 	private MultiLineTextField tfSentence;
 	private JRadioButton[] rbStatus;
-	private JComboBox<ComboBoxItem> cbSimilar;
+//	private JComboBox<ComboBoxItem> cbSimilar;
 	private JButton butDelete;
 	private JButton butSave;
 	private JButton butLookup1;
@@ -79,11 +79,11 @@ public class TermFrame extends JFrame {
 		tfTerm = new MultiLineTextField("", 200, 2, 35, this);
 		mainPanel.add(tfTerm.getTextAreaScrollPane(), "wrap");
 
-		mainPanel.add(new JLabel("Similar Terms:"), "right");
-		cbSimilar = new JComboBox<ComboBoxItem>(new Vector<ComboBoxItem>());
-		cbSimilar.setEditable(false);
-		cbSimilar.setMaximumRowCount(Constants.MAX_SIMILAR_TERMS + 1);
-		mainPanel.add(cbSimilar, "wrap");
+//		mainPanel.add(new JLabel("Similar Terms:"), "right");
+//		cbSimilar = new JComboBox<ComboBoxItem>(new Vector<ComboBoxItem>());
+//		cbSimilar.setEditable(false);
+//		cbSimilar.setMaximumRowCount(Constants.MAX_SIMILAR_TERMS + 1);
+//		mainPanel.add(cbSimilar, "wrap");
 
 		mainPanel.add(new JLabel("Translation:"), "right");
 		tfTranslation = new MultiLineTextField("", 200, 2, 35, this);
@@ -154,6 +154,37 @@ public class TermFrame extends JFrame {
 
 	}
 
+	public void changesDetected() {
+		String term = Utilities.replaceControlCharactersWithSpace(getTfTerm().getTextArea().getText());
+		String translation = Utilities.replaceControlCharactersWithSpace(getTfTranslation().getTextArea().getText());
+		String romanization = Utilities.replaceControlCharactersWithSpace(getTfRomanization().getTextArea().getText());
+		String sentence = Utilities.replaceControlCharactersWithSpace(getTfSentence().getTextArea().getText());
+		TermStatus status = getRbStatus();
+		String key = term.toLowerCase();
+		Terms terms = FLTR.getTerms();
+		boolean exists = (terms.getTermFromKey(key) != null);
+		if (!exists) {
+			butSave.setText("NEW - Save");
+			butSave.setEnabled(true);
+			if (!(status.equals(TermStatus.Ignored) || status.equals(TermStatus.WellKnown))) {
+				if (translation.equals("")) {
+					butSave.setEnabled(false);
+				}
+			}
+		} else {
+			String oldtermstring = terms.getTermFromKey(key).toString();
+			String newtermstring = (new Term(term, translation, sentence, romanization, status.getStatusCode()))
+					.toString();
+			if (oldtermstring.equals(newtermstring)) {
+				butSave.setText("Save");
+				butSave.setEnabled(false);
+			} else {
+				butSave.setText("CHANGED - Save");
+				butSave.setEnabled(true);
+			}
+		}
+	}
+
 	public JButton getButDelete() {
 		return butDelete;
 	}
@@ -220,7 +251,7 @@ public class TermFrame extends JFrame {
 	public void startEdit(Term t, String sentence) {
 		Utilities.setComponentOrientation(tfTerm.getTextArea());
 		Utilities.setComponentOrientation(tfSentence.getTextArea());
-		Utilities.setComponentOrientation(cbSimilar);
+//		Utilities.setComponentOrientation(cbSimilar);
 		tfSentence.getTextArea().setForeground(Color.BLACK);
 		setTitle("Edit Term");
 		originalKey = t.getKey();
@@ -230,7 +261,7 @@ public class TermFrame extends JFrame {
 		if (t.getSentence().trim().equals("")) {
 			if ((!Preferences.getCurrText().equals("<Vocabulary>")) && (!sentence.equals(""))) {
 				tfSentence.getTextArea().setText(sentence);
-				tfSentence.getTextArea().setForeground(new Color(0, 0, 128));
+//				tfSentence.getTextArea().setForeground(new Color(0, 0, 128));
 			} else {
 				tfSentence.getTextArea().setText("");
 			}
@@ -238,18 +269,19 @@ public class TermFrame extends JFrame {
 			tfSentence.getTextArea().setText(t.getSentence());
 		}
 		setRbStatus(t.getStatus());
-		cbSimilar.removeAllItems();
-		ArrayList<Term> list = FLTR.getTerms().getNearlyEquals(t.getTerm(), Constants.MAX_SIMILAR_TERMS);
-		boolean ok = false;
-		for (Term tt : list) {
-			if (!tt.equals(t)) {
-				ok = true;
-				cbSimilar.addItem(new ComboBoxItem(tt.displayWithoutStatus(), Constants.MAX_SIMILAR_TERMS_LENGTH));
-			}
-		}
-		if (!ok) {
-			cbSimilar.addItem(new ComboBoxItem("[None]", Constants.MAX_SIMILAR_TERMS_LENGTH));
-		}
+//		cbSimilar.removeAllItems();
+//		ArrayList<Term> list = FLTR.getTerms().getNearlyEquals(t.getTerm(), Constants.MAX_SIMILAR_TERMS);
+//		boolean ok = false;
+//		for (Term tt : list) {
+//			if (!tt.equals(t)) {
+//				ok = true;
+//				cbSimilar.addItem(new ComboBoxItem(tt.displayWithoutStatus(), Constants.MAX_SIMILAR_TERMS_LENGTH));
+//			}
+//		}
+//		if (!ok) {
+//			cbSimilar.addItem(new ComboBoxItem("[None]", Constants.MAX_SIMILAR_TERMS_LENGTH));
+//		}
+		changesDetected();
 		pack();
 		setVisible(true);
 		tfTranslation.getTextArea().requestFocusInWindow();
@@ -258,7 +290,7 @@ public class TermFrame extends JFrame {
 	public void startNew(String term, String sentence) {
 		Utilities.setComponentOrientation(tfTerm.getTextArea());
 		Utilities.setComponentOrientation(tfSentence.getTextArea());
-		Utilities.setComponentOrientation(cbSimilar);
+//		Utilities.setComponentOrientation(cbSimilar);
 		tfSentence.getTextArea().setForeground(Color.BLACK);
 		setTitle("New Term");
 		originalKey = term.toLowerCase();
@@ -271,16 +303,17 @@ public class TermFrame extends JFrame {
 			tfSentence.getTextArea().setText("");
 		}
 		setRbStatus(TermStatus.Unknown);
-		cbSimilar.removeAllItems();
-		ArrayList<Term> list = FLTR.getTerms().getNearlyEquals(term, Constants.MAX_SIMILAR_TERMS);
-		boolean ok = false;
-		for (Term tt : list) {
-			ok = true;
-			cbSimilar.addItem(new ComboBoxItem(tt.displayWithoutStatus(), Constants.MAX_SIMILAR_TERMS_LENGTH));
-		}
-		if (!ok) {
-			cbSimilar.addItem(new ComboBoxItem("[None]", Constants.MAX_SIMILAR_TERMS_LENGTH));
-		}
+//		cbSimilar.removeAllItems();
+//		ArrayList<Term> list = FLTR.getTerms().getNearlyEquals(term, Constants.MAX_SIMILAR_TERMS);
+//		boolean ok = false;
+//		for (Term tt : list) {
+//			ok = true;
+//			cbSimilar.addItem(new ComboBoxItem(tt.displayWithoutStatus(), Constants.MAX_SIMILAR_TERMS_LENGTH));
+//		}
+//		if (!ok) {
+//			cbSimilar.addItem(new ComboBoxItem("[None]", Constants.MAX_SIMILAR_TERMS_LENGTH));
+//		}
+		changesDetected();
 		pack();
 		setVisible(true);
 		tfTranslation.getTextArea().requestFocusInWindow();

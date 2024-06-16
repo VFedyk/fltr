@@ -2,7 +2,7 @@
  *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
  *
- * Copyright © 2012-2020 FLTR Developers et al.
+ * Copyright © 2012-2021 FLTR Developers et al.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -66,10 +66,10 @@ public class GeneralSettingsDialog extends JDialog {
 		settingsTableModel = new GeneralSettingsTableModel();
 		settingsTable = new JTable(settingsTableModel);
 		settingsTable.setPreferredScrollableViewportSize(
-				new Dimension(Preferences.scaleIntValue(300), Preferences.scaleIntValue(100)));
+				new Dimension(Preferences.scaleIntValue(300), Preferences.scaleIntValue(250)));
 		settingsTable.setFillsViewportHeight(true);
 		settingsTable.getTableHeader().setReorderingAllowed(false);
-		settingsTable.getColumnModel().getColumn(1).setPreferredWidth(Preferences.scaleIntValue(120));
+		settingsTable.getColumnModel().getColumn(1).setPreferredWidth(Preferences.scaleIntValue(125));
 		settingsTable.setRowHeight(Preferences.scaleIntValue(settingsTable.getRowHeight()));
 		settingsTableScrollPane = new JScrollPane(settingsTable);
 		settingsTableScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);

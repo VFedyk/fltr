@@ -2,7 +2,7 @@
  *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
  *
- * Copyright © 2012-2020 FLTR Developers et al.
+ * Copyright © 2012-2021 FLTR Developers et al.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -34,14 +34,28 @@ import java.awt.event.KeyListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JRootPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
-public class MultiLineTextFieldListener implements KeyListener {
+public class MultiLineTextFieldListener implements KeyListener, DocumentListener {
 
 	private JFrame frame;
 
 	public MultiLineTextFieldListener(JFrame frame) {
 		super();
 		this.frame = frame;
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent arg0) {
+		if (frame instanceof TermFrame)
+			((TermFrame) frame).changesDetected();
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent arg0) {
+		if (frame instanceof TermFrame)
+			((TermFrame) frame).changesDetected();
 	}
 
 	@Override
@@ -58,7 +72,11 @@ public class MultiLineTextFieldListener implements KeyListener {
 			JRootPane rootPane = frame.getRootPane();
 			JButton dftBtn = rootPane.getDefaultButton();
 			if (dftBtn != null) {
-				dftBtn.doClick();
+				if (dftBtn.isEnabled()) {
+					dftBtn.doClick();
+				} else {
+					e.consume();
+				}
 			} else {
 				e.consume();
 			}
@@ -71,6 +89,12 @@ public class MultiLineTextFieldListener implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent arg0) {
+		if (frame instanceof TermFrame)
+			((TermFrame) frame).changesDetected();
 	}
 
 }

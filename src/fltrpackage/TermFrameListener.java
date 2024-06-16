@@ -2,7 +2,7 @@
  *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
  *
- * Copyright © 2012-2020 FLTR Developers et al.
+ * Copyright © 2012-2021 FLTR Developers et al.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -94,7 +94,8 @@ public class TermFrameListener implements ActionListener, HierarchyBoundsListene
 				t.setStatus(status);
 				terms.setDirty(true);
 			}
-			frame.setVisible(false);
+			// frame.setVisible(false);
+			frame.changesDetected();
 			FLTR.getText().matchWithTerms();
 			FLTR.getTextFrame().getTextPanel().repaint();
 			FLTR.getTextFrame().getTextPanel().requestFocus();
@@ -128,7 +129,10 @@ public class TermFrameListener implements ActionListener, HierarchyBoundsListene
 		} else if (o.equals(frame.getButLookup3())) {
 			FLTR.getLanguage().lookupWordInBrowser(
 					Utilities.replaceControlCharactersWithSpace(frame.getTfTerm().getTextArea().getText()), 3, true);
+		} else {
+			frame.changesDetected();
 		}
+
 	}
 
 	@Override

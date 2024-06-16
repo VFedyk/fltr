@@ -2,7 +2,7 @@
  *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
  *
- * Copyright © 2012-2020 FLTR Developers et al.
+ * Copyright © 2012-2021 FLTR Developers et al.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -77,11 +77,57 @@ public class TextFrameListener
 				}
 			} else if (((String) mi.getClientProperty("action")).equals("info")) {
 				Utilities.showInfoMessage(FLTR.getText().getInfo() + "-----------------------\n" + terms.getInfo());
+			} else if (((String) mi.getClientProperty("action")).equals("saveterms")) {
+				if (terms.isDirty()) {
+					String backupFilename = terms.getFile().getAbsolutePath();
+					backupFilename = backupFilename.substring(0,
+							backupFilename.length() - Constants.TEXT_FILE_EXTENSION_LENGTH) + ".bak";
+					if (Utilities.renameFile(terms.getFile(), (new File(backupFilename))) == false) {
+						Utilities.showErrorMessage(
+								"Renaming your Vocabulary for Backup has failed.\n\nSorry, saving your vocabulary seems not be possible.");
+					} else {
+						if (terms.isSaveTermsToFileOK() == false) {
+							Utilities
+									.showErrorMessage("Writing your Vocabulary to\n" + terms.getFile().getAbsolutePath()
+											+ "\nhas failed.\n\nSorry, saving your vocabulary seems not be possible.");
+						} else {
+							Utilities.showInfoMessage("Success!\n\nYour Vocabulary has been successfully written to\n"
+									+ terms.getFile().getAbsolutePath() + "\n\nThe previous version is available in\n"
+									+ backupFilename);
+						}
+					}
+				} else {
+					Utilities.showInfoMessage("There is no need to save your vocabulary as nothing has changed.");
+				}
+			} else if (((String) mi.getClientProperty("action")).equals("exportterms")) {
+				File f = terms.getExportFile();
+				boolean exportOK = terms.isExportTermsToFileOK();
+				if (!exportOK) {
+					if (f != null) {
+						if (f.exists() && f.isFile()) {
+							f.delete();
+						}
+					}
+				} else {
+					exportOK = (f.exists() && f.isFile());
+				}
+				if (!exportOK) {
+					Utilities.showErrorMessage("Exporting your Vocabulary to\n" + f.getAbsolutePath()
+							+ "\nhas failed,\nor is deactivated (DoExport=0),\nor the Export Template is empty,"
+							+ "\nor the Export Status List is empty.\n\nSorry, Exporting seems not be possible.");
+				} else {
+					Utilities.showInfoMessage(
+							"Success!\n\nYour Vocabulary has been exported to\n" + f.getAbsolutePath());
+				}
 			} else if (((String) mi.getClientProperty("action")).equals("miss")) {
 				int missSent = FLTR.getText().setMissingSentences();
 				Utilities.showInfoMessage(String.valueOf(missSent) + " Sentences in existent Terms added.");
 			} else if (((String) mi.getClientProperty("action")).equals("delete")) {
+				String termtext = ((Term) mi.getClientProperty("term")).getTerm();
 				terms.removeTerm((Term) mi.getClientProperty("term"));
+				if (FLTR.getTermFrame().isVisible()
+						&& FLTR.getTermFrame().getTfTerm().getTextArea().getText().equals(termtext))
+					FLTR.getTermFrame().setVisible(false);
 				FLTR.getText().matchWithTerms();
 				frame.getTextPanel().repaint();
 				frame.getTextPanel().requestFocus();
@@ -100,6 +146,7 @@ public class TextFrameListener
 				FLTR.getLanguage().lookupWordInBrowser(word, link, true);
 			} else if (((String) mi.getClientProperty("action")).equals("setstatus")) {
 				Term t = (Term) mi.getClientProperty("term");
+				String termtext = t.getTerm();
 				TermStatus ts = (TermStatus) mi.getClientProperty("status");
 				t.setStatus(ts);
 				terms.setDirty(true);
@@ -110,6 +157,9 @@ public class TextFrameListener
 				}
 				frame.getTextPanel().repaint();
 				frame.getTextPanel().requestFocus();
+				if (FLTR.getTermFrame().isVisible()
+						&& FLTR.getTermFrame().getTfTerm().getTextArea().getText().equals(termtext))
+					FLTR.getTermFrame().setRbStatus(ts);
 			} else if (((String) mi.getClientProperty("action")).equals("knowthis")) {
 				TermStatus ts = (TermStatus) mi.getClientProperty("status");
 				Text t = FLTR.getText();

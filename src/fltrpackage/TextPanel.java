@@ -2,7 +2,7 @@
  *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
  *
- * Copyright © 2012-2020 FLTR Developers et al.
+ * Copyright © 2012-2021 FLTR Developers et al.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -95,8 +95,8 @@ public class TextPanel extends JPanel {
 		FontRenderContext frc = g2d.getFontRenderContext();
 		TextLayout textLayout = new TextLayout("X", font, frc);
 		int h = (int) (textLayout.getAscent() + textLayout.getDescent());
-		new Color(230, 230, 230);
-		new Color(250, 250, 210);
+		// new Color(230, 230, 230);
+		// new Color(250, 250, 210);
 		float asc = textLayout.getAscent();
 		if (text.isCoordSet()) {
 			Point viewPos = viewPort.getViewPosition();
@@ -112,7 +112,7 @@ public class TextPanel extends JPanel {
 						boolean notLastWord = !item.isLastWord();
 						Color c;
 						if (term == null) {
-							c = TermStatus.None.getStatusColor();
+							c = TermStatus.New.getStatusColor();
 						} else {
 							c = term.getStatus().getStatusColor();
 						}

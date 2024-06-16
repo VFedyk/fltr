@@ -2,7 +2,7 @@
  *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
  *
- * Copyright © 2012-2020 FLTR Developers et al.
+ * Copyright © 2012-2021 FLTR Developers et al.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -27,6 +27,7 @@
 
 package fltrpackage;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -45,6 +46,56 @@ public class Preferences {
 
 	private static boolean getBoolPreference(String key, boolean def) {
 		return (Preferences.getIntPreference(key, (def ? 1 : 0)) != 0);
+	}
+
+	private static String getColorPreference(String key, String def) {
+		String s = Preferences.getPreference(key.trim(), def.trim());
+		String result;
+		s = s.replace("#", "").toUpperCase();
+		if (s.length() != 6) {
+			result = def;
+		} else {
+			try {
+				Color color = Color.decode("#" + s);
+				result = color.toString();
+				result = s;
+			} catch (Exception e) {
+				result = def;
+			}
+		}
+		return result;
+	}
+
+	public static String getCurrColorIgnored() {
+		return Preferences.getColorPreference("currColorIgnored", "E5E5E5");
+	}
+
+	public static String getCurrColorKnown() {
+		return Preferences.getColorPreference("currColorKnown", "C5FFC5");
+	}
+
+	public static String getCurrColorLearning2() {
+		return Preferences.getColorPreference("currColorLearning2", "F5CCA9");
+	}
+
+	public static String getCurrColorLearning3() {
+		return Preferences.getColorPreference("currColorLearning3", "F5E1A9");
+	}
+
+	public static String getCurrColorLearning4() {
+		return Preferences.getColorPreference("currColorLearning4", "F5F3A9");
+	}
+
+	public static String getCurrColorNew() {
+		return Preferences.getColorPreference("currColorNew", "B4BCFF");
+	}
+
+	public static String getCurrColorUnknown() {
+		return Preferences.getColorPreference("currColorUnknown", "F5B8A9");
+	}
+
+	public static String getCurrColorWellKnown() {
+		return Preferences.getColorPreference("currColorWellKnown", "E5FFE5");
 	}
 
 	public static int getCurrDialogFontSizePercent() {
@@ -150,6 +201,50 @@ public class Preferences {
 
 	private static void putBoolPreference(String key, boolean value) {
 		Preferences.putIntPreference(key, (value ? 1 : 0));
+	}
+
+	private static void putColorPreference(String key, String value) {
+		putPreference(key, value);
+	}
+
+	public static void putCurrColorIgnored(String s) {
+		Preferences.putColorPreference("currColorIgnored", s);
+		Preferences.putColorPreference("currColorIgnored", Preferences.getCurrColorIgnored());
+	}
+
+	public static void putCurrColorKnown(String s) {
+		Preferences.putColorPreference("currColorKnown", s);
+		Preferences.putColorPreference("currColorKnown", Preferences.getCurrColorKnown());
+	}
+
+	public static void putCurrColorLearning2(String s) {
+		Preferences.putColorPreference("currColorLearning2", s);
+		Preferences.putColorPreference("currColorLearning2", Preferences.getCurrColorLearning2());
+	}
+
+	public static void putCurrColorLearning3(String s) {
+		Preferences.putColorPreference("currColorLearning3", s);
+		Preferences.putColorPreference("currColorLearning3", Preferences.getCurrColorLearning3());
+	}
+
+	public static void putCurrColorLearning4(String s) {
+		Preferences.putColorPreference("currColorLearning4", s);
+		Preferences.putColorPreference("currColorLearning4", Preferences.getCurrColorLearning4());
+	}
+
+	public static void putCurrColorNew(String s) {
+		Preferences.putColorPreference("currColorNew", s);
+		Preferences.putColorPreference("currColorNew", Preferences.getCurrColorNew());
+	}
+
+	public static void putCurrColorUnknown(String s) {
+		Preferences.putColorPreference("currColorUnknown", s);
+		Preferences.putColorPreference("currColorUnknown", Preferences.getCurrColorUnknown());
+	}
+
+	public static void putCurrColorWellKnown(String s) {
+		Preferences.putColorPreference("currColorWellKnown", s);
+		Preferences.putColorPreference("currColorWellKnown", Preferences.getCurrColorWellKnown());
 	}
 
 	public static void putCurrDialogFontSizePercent(int i) {

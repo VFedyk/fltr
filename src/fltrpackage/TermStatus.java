@@ -2,7 +2,7 @@
  *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
  *
- * Copyright © 2012-2020 FLTR Developers et al.
+ * Copyright © 2012-2021 FLTR Developers et al.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -34,13 +34,11 @@ import java.util.Vector;
 
 public enum TermStatus {
 
-	None(0), Unknown(1), Learning2(2), Learning3(3), Learning4(4), Known(5), Ignored(98), WellKnown(99);
+	New(0), Unknown(1), Learning2(2), Learning3(3), Learning4(4), Known(5), Ignored(98), WellKnown(99);
 
 	private static final HashMap<Integer, TermStatus> lookup = new HashMap<Integer, TermStatus>();
 
 	private static final HashMap<Integer, TermStatus> lookupOrdinal = new HashMap<Integer, TermStatus>();
-
-	private static final HashMap<TermStatus, Color> colors = new HashMap<TermStatus, Color>();
 
 	private static final HashMap<TermStatus, String> texts = new HashMap<TermStatus, String>();
 
@@ -52,16 +50,7 @@ public enum TermStatus {
 			TermStatus.lookupOrdinal.put(status.ordinal(), status);
 		}
 
-		TermStatus.colors.put(None, new Color(180, 188, 255)); // B4BCFF
-		TermStatus.colors.put(Unknown, new Color(245, 184, 169)); // F5B8A9
-		TermStatus.colors.put(Learning2, new Color(245, 204, 169)); // F5CCA9
-		TermStatus.colors.put(Learning3, new Color(245, 225, 169)); // F5E1A9
-		TermStatus.colors.put(Learning4, new Color(245, 243, 169)); // F5F3A9
-		TermStatus.colors.put(Known, new Color(197, 255, 197)); // C5FFC5
-		TermStatus.colors.put(Ignored, new Color(229, 229, 229)); // E5E5E5
-		TermStatus.colors.put(WellKnown, new Color(229, 255, 229)); // E5FFE5
-
-		TermStatus.texts.put(None, "No status (" + None.getStatusCode() + ")");
+		TermStatus.texts.put(New, "No status (" + New.getStatusCode() + ")");
 		TermStatus.texts.put(Unknown, "Unknown (" + Unknown.getStatusCode() + ")");
 		TermStatus.texts.put(Learning2, "Learning (" + Learning2.getStatusCode() + ")");
 		TermStatus.texts.put(Learning3, "Learning (" + Learning3.getStatusCode() + ")");
@@ -70,7 +59,7 @@ public enum TermStatus {
 		TermStatus.texts.put(Ignored, "Ignored (" + Ignored.getStatusCode() + ")");
 		TermStatus.texts.put(WellKnown, "Well Known (" + WellKnown.getStatusCode() + ")");
 
-		TermStatus.shorttexts.put(None, "No Status");
+		TermStatus.shorttexts.put(New, "No Status");
 		TermStatus.shorttexts.put(Unknown, "Unknown/1");
 		TermStatus.shorttexts.put(Learning2, "Learning/2");
 		TermStatus.shorttexts.put(Learning3, "Learning/3");
@@ -83,7 +72,7 @@ public enum TermStatus {
 	public static Vector<TermStatus> getAllActive() {
 		Vector<TermStatus> r = new Vector<TermStatus>(7);
 		for (TermStatus status : EnumSet.allOf(TermStatus.class)) {
-			if (status != None) {
+			if (status != New) {
 				r.add(status);
 			}
 		}
@@ -103,7 +92,7 @@ public enum TermStatus {
 	public static Vector<ComboBoxItem> getComboBoxItemVector() {
 		Vector<ComboBoxItem> r = new Vector<ComboBoxItem>(7);
 		for (TermStatus status : EnumSet.allOf(TermStatus.class)) {
-			if (status != None) {
+			if (status != New) {
 				r.add(new ComboBoxItem(status.getStatusText(), 1000));
 			}
 		}
@@ -148,11 +137,25 @@ public enum TermStatus {
 	}
 
 	public Color getStatusColor() {
-		if (TermStatus.colors.containsKey(this)) {
-			return TermStatus.colors.get(this);
-		} else {
-			return Color.WHITE;
+		switch (this) {
+		case New:
+			return Color.decode("#" + Preferences.getCurrColorNew());
+		case Unknown:
+			return Color.decode("#" + Preferences.getCurrColorUnknown());
+		case Learning2:
+			return Color.decode("#" + Preferences.getCurrColorLearning2());
+		case Learning3:
+			return Color.decode("#" + Preferences.getCurrColorLearning3());
+		case Learning4:
+			return Color.decode("#" + Preferences.getCurrColorLearning4());
+		case Known:
+			return Color.decode("#" + Preferences.getCurrColorKnown());
+		case Ignored:
+			return Color.decode("#" + Preferences.getCurrColorIgnored());
+		case WellKnown:
+			return Color.decode("#" + Preferences.getCurrColorWellKnown());
 		}
+		return Color.WHITE;
 	}
 
 	public String getStatusShortText() {
