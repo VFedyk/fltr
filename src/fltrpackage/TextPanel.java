@@ -95,8 +95,6 @@ public class TextPanel extends JPanel {
 		FontRenderContext frc = g2d.getFontRenderContext();
 		TextLayout textLayout = new TextLayout("X", font, frc);
 		int h = (int) (textLayout.getAscent() + textLayout.getDescent());
-		// new Color(230, 230, 230);
-		// new Color(250, 250, 210);
 		float asc = textLayout.getAscent();
 		if (text.isCoordSet()) {
 			Point viewPos = viewPort.getViewPosition();

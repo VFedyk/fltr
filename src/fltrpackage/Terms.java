@@ -209,7 +209,6 @@ public class Terms {
 		return maxRes;
 	}
 
-	// Not used
 	public ArrayList<Term> getNearlyEquals(String string, int max) {
 		ArrayList<char[]> stringBigram = FuzzySearch.calcBigram(string.toLowerCase());
 		ArrayList<Term> temp = new ArrayList<Term>(data.size());

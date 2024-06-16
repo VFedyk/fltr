@@ -29,8 +29,8 @@ package fltrpackage;
 
 public class Constants {
 
-	public static final String SHORT_VERSION = "1.1.0";
-	public static final String VERSION = Constants.SHORT_VERSION + " (2021-05-25)";
+	public static final String SHORT_VERSION = "1.2.0";
+	public static final String VERSION = Constants.SHORT_VERSION + " (2021-05-30)";
 
 	public static final String SHORT_NAME = "FLTR";
 	public static final String LONG_NAME = "Foreign Language Text Reader";
@@ -62,9 +62,6 @@ public class Constants {
 	public static final int MAX_TEXT_LENGTH_START_FRAME = 30;
 	public static final int MAX_LANG_LENGTH_START_FRAME = 30;
 
-	// Not used
-	public static final int MAX_SIMILAR_TERMS = 10;
-	public static final int MAX_SIMILAR_TERMS_LENGTH = 45;
 	public static final double FUZZY_THRESHOLD = 0.333;
 
 	public static final String PARAGRAPH_MARKER = "¶";

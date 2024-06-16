@@ -27,15 +27,12 @@
 
 package fltrpackage;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-//import java.util.ArrayList;
-//import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-//import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -52,8 +49,8 @@ public class TermFrame extends JFrame {
 	private MultiLineTextField tfTranslation;
 	private MultiLineTextField tfRomanization;
 	private MultiLineTextField tfSentence;
+	private MultiLineTextField tfSimilar;
 	private JRadioButton[] rbStatus;
-//	private JComboBox<ComboBoxItem> cbSimilar;
 	private JButton butDelete;
 	private JButton butSave;
 	private JButton butLookup1;
@@ -61,6 +58,7 @@ public class TermFrame extends JFrame {
 	private JButton butLookup3;
 	private TermFrameListener listener;
 	private String originalKey;
+	private int maxSim;
 
 	public TermFrame() {
 		super();
@@ -76,25 +74,26 @@ public class TermFrame extends JFrame {
 		mainPanel.setLayout(mainPanelLayout);
 
 		mainPanel.add(new JLabel("Term:"), "right");
-		tfTerm = new MultiLineTextField("", 200, 2, 35, this);
+		tfTerm = new MultiLineTextField("", 200, 2, 35, this, false);
 		mainPanel.add(tfTerm.getTextAreaScrollPane(), "wrap");
 
-//		mainPanel.add(new JLabel("Similar Terms:"), "right");
-//		cbSimilar = new JComboBox<ComboBoxItem>(new Vector<ComboBoxItem>());
-//		cbSimilar.setEditable(false);
-//		cbSimilar.setMaximumRowCount(Constants.MAX_SIMILAR_TERMS + 1);
-//		mainPanel.add(cbSimilar, "wrap");
+		maxSim = Preferences.getCurrMaxSimTerms();
+		if (maxSim > 0) {
+			mainPanel.add(new JLabel("Similar Terms:"), "right");
+			tfSimilar = new MultiLineTextField("", maxSim * 1000, Integer.min(3, maxSim), 35, this, false);
+			mainPanel.add(tfSimilar.getTextAreaScrollPane(), "wrap");
+		}
 
 		mainPanel.add(new JLabel("Translation:"), "right");
-		tfTranslation = new MultiLineTextField("", 200, 2, 35, this);
+		tfTranslation = new MultiLineTextField("", 200, 2, 35, this, true);
 		mainPanel.add(tfTranslation.getTextAreaScrollPane(), "wrap");
 
 		mainPanel.add(new JLabel("Romanization:"), "right");
-		tfRomanization = new MultiLineTextField("", 200, 2, 35, this);
+		tfRomanization = new MultiLineTextField("", 200, 2, 35, this, true);
 		mainPanel.add(tfRomanization.getTextAreaScrollPane(), "wrap");
 
 		mainPanel.add(new JLabel("Sentence:"), "right");
-		tfSentence = new MultiLineTextField("", 400, 2, 35, this);
+		tfSentence = new MultiLineTextField("", 400, 2, 35, this, true);
 		mainPanel.add(tfSentence.getTextAreaScrollPane(), "wrap");
 
 		mainPanel.add(new JLabel("Status:"), "gapbottom 10px, right");
@@ -185,6 +184,26 @@ public class TermFrame extends JFrame {
 		}
 	}
 
+	public void fillSimTerms(String termstring, boolean exists) {
+		String s = "";
+		int i = 0;
+		ArrayList<Term> list = FLTR.getTerms().getNearlyEquals(termstring, (exists ? (1 + maxSim) : maxSim));
+		for (Term tt : list) {
+			if (!(exists && tt.getTerm().equalsIgnoreCase(termstring))) {
+				i++;
+				s += Integer.toString(i) + ") " + tt.displayWithoutStatus() + "\n";
+			}
+		}
+		if (i == 0) {
+			s = "[None]\n";
+		}
+		if (i == 1) {
+			s = s.substring(3, s.length());
+		}
+		tfSimilar.getTextArea().setText(s.substring(0, s.length() - 1));
+		tfSimilar.getTextArea().setCaretPosition(0);
+	}
+
 	public JButton getButDelete() {
 		return butDelete;
 	}
@@ -251,8 +270,8 @@ public class TermFrame extends JFrame {
 	public void startEdit(Term t, String sentence) {
 		Utilities.setComponentOrientation(tfTerm.getTextArea());
 		Utilities.setComponentOrientation(tfSentence.getTextArea());
-//		Utilities.setComponentOrientation(cbSimilar);
-		tfSentence.getTextArea().setForeground(Color.BLACK);
+		if (maxSim > 0)
+			Utilities.setComponentOrientation(tfSimilar.getTextArea());
 		setTitle("Edit Term");
 		originalKey = t.getKey();
 		tfTerm.getTextArea().setText(t.getTerm());
@@ -261,7 +280,6 @@ public class TermFrame extends JFrame {
 		if (t.getSentence().trim().equals("")) {
 			if ((!Preferences.getCurrText().equals("<Vocabulary>")) && (!sentence.equals(""))) {
 				tfSentence.getTextArea().setText(sentence);
-//				tfSentence.getTextArea().setForeground(new Color(0, 0, 128));
 			} else {
 				tfSentence.getTextArea().setText("");
 			}
@@ -269,18 +287,8 @@ public class TermFrame extends JFrame {
 			tfSentence.getTextArea().setText(t.getSentence());
 		}
 		setRbStatus(t.getStatus());
-//		cbSimilar.removeAllItems();
-//		ArrayList<Term> list = FLTR.getTerms().getNearlyEquals(t.getTerm(), Constants.MAX_SIMILAR_TERMS);
-//		boolean ok = false;
-//		for (Term tt : list) {
-//			if (!tt.equals(t)) {
-//				ok = true;
-//				cbSimilar.addItem(new ComboBoxItem(tt.displayWithoutStatus(), Constants.MAX_SIMILAR_TERMS_LENGTH));
-//			}
-//		}
-//		if (!ok) {
-//			cbSimilar.addItem(new ComboBoxItem("[None]", Constants.MAX_SIMILAR_TERMS_LENGTH));
-//		}
+		if (maxSim > 0)
+			fillSimTerms(t.getTerm(), true);
 		changesDetected();
 		pack();
 		setVisible(true);
@@ -290,8 +298,8 @@ public class TermFrame extends JFrame {
 	public void startNew(String term, String sentence) {
 		Utilities.setComponentOrientation(tfTerm.getTextArea());
 		Utilities.setComponentOrientation(tfSentence.getTextArea());
-//		Utilities.setComponentOrientation(cbSimilar);
-		tfSentence.getTextArea().setForeground(Color.BLACK);
+		if (maxSim > 0)
+			Utilities.setComponentOrientation(tfSimilar.getTextArea());
 		setTitle("New Term");
 		originalKey = term.toLowerCase();
 		tfTerm.getTextArea().setText(term);
@@ -303,16 +311,8 @@ public class TermFrame extends JFrame {
 			tfSentence.getTextArea().setText("");
 		}
 		setRbStatus(TermStatus.Unknown);
-//		cbSimilar.removeAllItems();
-//		ArrayList<Term> list = FLTR.getTerms().getNearlyEquals(term, Constants.MAX_SIMILAR_TERMS);
-//		boolean ok = false;
-//		for (Term tt : list) {
-//			ok = true;
-//			cbSimilar.addItem(new ComboBoxItem(tt.displayWithoutStatus(), Constants.MAX_SIMILAR_TERMS_LENGTH));
-//		}
-//		if (!ok) {
-//			cbSimilar.addItem(new ComboBoxItem("[None]", Constants.MAX_SIMILAR_TERMS_LENGTH));
-//		}
+		if (maxSim > 0)
+			fillSimTerms(term, false);
 		changesDetected();
 		pack();
 		setVisible(true);

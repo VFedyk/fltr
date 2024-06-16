@@ -118,6 +118,10 @@ public class Preferences {
 		return Preferences.getPreference("currMainDir", "[Select…]");
 	}
 
+	public static int getCurrMaxSimTerms() {
+		return Preferences.getIntPreference("currMaxSimTerms", 3);
+	}
+
 	public static boolean getCurrPopupMenusNested() {
 		return Preferences.getBoolPreference("currPopupMenusNested", false);
 	}
@@ -265,6 +269,10 @@ public class Preferences {
 
 	public static void putCurrMainDir(String s) {
 		Preferences.putPreference("currMainDir", s);
+	}
+
+	public static void putCurrMaxSimTerms(int i) {
+		Preferences.putIntPreference("currMaxSimTerms", i);
 	}
 
 	public static void putCurrPopupMenusNested(boolean b) {

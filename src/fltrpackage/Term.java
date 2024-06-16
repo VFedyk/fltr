@@ -67,7 +67,7 @@ public class Term {
 			tr = "(No Translation)";
 		}
 		if (rtl) {
-			return tr + " — " + s + term;
+			return tr + " " + s + "— " + term;
 		} else {
 			return term + s + " — " + tr;
 		}

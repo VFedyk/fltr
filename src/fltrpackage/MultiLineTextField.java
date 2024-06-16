@@ -27,6 +27,8 @@
 
 package fltrpackage;
 
+import java.awt.Color;
+
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPopupMenu;
@@ -42,12 +44,14 @@ public class MultiLineTextField {
 	private JTextArea textArea;
 	private JScrollPane textAreaScrollPane;
 
-	public MultiLineTextField(String text, int maxChar, int lines, int width, JFrame frame) {
+	public MultiLineTextField(String text, int maxChar, int lines, int width, JFrame frame, boolean editable) {
 		textArea = new JTextArea(text);
 		textArea.setRows(lines);
 		textArea.setColumns(width);
 		textArea.setFont(UIManager.getDefaults().getFont("JTextField.font"));
-		textArea.setEditable(true);
+		textArea.setEditable(editable);
+		if (!editable)
+			textArea.setBackground(new Color(230, 230, 230));
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
 		AbstractDocument doc = (AbstractDocument) textArea.getDocument();
@@ -56,15 +60,19 @@ public class MultiLineTextField {
 		doc.addDocumentListener(listener);
 		textArea.addKeyListener(listener);
 		JPopupMenu popupMenu = new JPopupMenu();
-		Action paste = new DefaultEditorKit.PasteAction();
-		paste.putValue(Action.NAME, "Paste");
-		popupMenu.add(paste);
+		if (editable) {
+			Action paste = new DefaultEditorKit.PasteAction();
+			paste.putValue(Action.NAME, "Paste");
+			popupMenu.add(paste);
+		}
 		Action copy = new DefaultEditorKit.CopyAction();
 		copy.putValue(Action.NAME, "Copy");
 		popupMenu.add(copy);
-		Action cut = new DefaultEditorKit.CutAction();
-		cut.putValue(Action.NAME, "Cut");
-		popupMenu.add(cut);
+		if (editable) {
+			Action cut = new DefaultEditorKit.CutAction();
+			cut.putValue(Action.NAME, "Cut");
+			popupMenu.add(cut);
+		}
 		textArea.setComponentPopupMenu(popupMenu);
 		textAreaScrollPane = new JScrollPane(textArea);
 		textAreaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);

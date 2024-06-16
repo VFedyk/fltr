@@ -53,7 +53,7 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return 13;
+		return 14;
 	}
 
 	@Override
@@ -86,6 +86,8 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 				return "ColorIgnored";
 			case 12:
 				return "ColorWellKnown";
+			case 13:
+				return "MaxSimilarTerms";
 			default:
 				return "???";
 			}
@@ -117,6 +119,8 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 				return Preferences.getCurrColorIgnored();
 			case 12:
 				return Preferences.getCurrColorWellKnown();
+			case 13:
+				return Preferences.getCurrMaxSimTerms();
 			default:
 				return "???";
 			}
@@ -149,6 +153,9 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 				break;
 			case 3:
 				v = 100;
+				break;
+			case 13:
+				v = 3;
 				break;
 			default:
 				v = 0;
@@ -219,6 +226,15 @@ public class GeneralSettingsTableModel extends AbstractTableModel {
 			break;
 		case 12:
 			Preferences.putCurrColorWellKnown((String) value);
+			break;
+		case 13:
+			if (v < 0) {
+				v = 0;
+			}
+			if (v > 10) {
+				v = 10;
+			}
+			Preferences.putCurrMaxSimTerms(v);
 			break;
 		}
 	}
