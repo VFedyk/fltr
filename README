@@ -1,9 +1,24 @@
-Foreign Language Text Reader (FLTR) 
-Version 0.8.10 (2020-07-17)
-Copyright © 2012-2020 FLTR Developers.
+FLTR (Foreign Language Text Reader)
+Version 1.0.0 (03-Oct-2020)
+________________________________________________________________________
 
-Documentation ……… FLTR_Documentation.pdf  
-FLTR for Windows ……… FLTR_Win.zip
-FLTR for Linux, Unix, macOS ……… FLTR_Linux.zip
-Demo Data ……… FLTR_Demo_Data.zip
-Source Code ……… FLTR_Source.zip
+Website      
+https://sourceforge.net/projects/foreign-language-text-reader/
+
+Download      
+https://sourceforge.net/projects/foreign-language-text-reader/files/
+
+Online Documentation  
+https://foreign-language-text-reader.sourceforge.io
+________________________________________________________________________
+
+Contents of download archive 
+"foreign_language_text_reader_1_0_0_complete.zip"
+
+FLTR.exe ……………………………………… FLTR for Windows
+FLTR.jar ……………………………………… FLTR for Linux, Unix, macOS, ...
+FLTR_Demo_Data.zip …………… Demo data
+FLTR_Documentation.pdf … Documentation
+FLTR_Source.zip …………………… Source code, ext. JARs, icons, HTML files
+README.txt ………………………………… This file
+________________________________________________________________________

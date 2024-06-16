@@ -2,7 +2,7 @@
  *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
  *
- * Copyright © 2012-2019 FLTR Developers.
+ * Copyright © 2012-2020 FLTR Developers et al.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -312,7 +312,7 @@ public class Utilities {
 		String os = System.getProperty("os.name").toLowerCase();
 		if ((os.indexOf("nix") >= 0) || (os.indexOf("nux") >= 0)) {
 			try {
-				String[] fmgrs = { "thunar", "nautilus", "dolphin" };
+				String[] fmgrs = { "xdg-open", "nemo", "thunar", "nautilus", "dolphin" };
 				StringBuffer cmd = new StringBuffer();
 				for (int i = 0; i < fmgrs.length; i++) {
 					cmd.append((i == 0 ? "" : " || ") + fmgrs[i] + " \"" + dir.getAbsolutePath() + "\" ");
@@ -320,11 +320,11 @@ public class Utilities {
 				Runtime.getRuntime().exec(new String[] { "sh", "-c", cmd.toString() });
 			} catch (Exception e) {
 				Utilities.showErrorMessage(
-						"Opening a Directory in a File Explorer not possible\n(none found, try to install a newer Java).");
+						"Opening a Directory in a File Explorer not possible\n(Try to install a a newer Java runtime).");
 			}
 		} else {
 			Utilities.showErrorMessage(
-					"Opening a Directory in a File Explorer not possible\n(desktop integration problem, try to install a newer Java).");
+					"Opening a Directory in a File Explorer not possible\n(desktop integration problem, try to install a newer Java runtime).");
 		}
 	}
 
@@ -337,7 +337,7 @@ public class Utilities {
 		String os = System.getProperty("os.name").toLowerCase();
 		if ((os.indexOf("nix") >= 0) || (os.indexOf("nux") >= 0)) {
 			try {
-				String[] editors = { "geany", "leafpad", "gedit", "mousepad" };
+				String[] editors = { "xdg-open", "leafpad", "mousepad", "gedit" };
 				StringBuffer cmd = new StringBuffer();
 				for (int i = 0; i < editors.length; i++) {
 					cmd.append((i == 0 ? "" : " || ") + editors[i] + " \"" + textFile.getAbsolutePath() + "\" ");
@@ -345,11 +345,11 @@ public class Utilities {
 				Runtime.getRuntime().exec(new String[] { "sh", "-c", cmd.toString() });
 			} catch (Exception e) {
 				Utilities.showErrorMessage(
-						"Text file cannot be edited\n(no editor found, try to install a newer Java).");
+						"Text file cannot be edited\n(no text editor found, or try to install a newer Java runtime).");
 			}
 		} else {
 			Utilities.showErrorMessage(
-					"Text file cannot be edited\n(desktop integration problem, try to install a newer Java).");
+					"Text file cannot be edited\n(desktop integration problem, try to install a newer Java runtime).");
 		}
 	}
 
@@ -364,8 +364,8 @@ public class Utilities {
 		try {
 			Desktop.getDesktop().browse(u);
 		} catch (Exception e) {
-			Utilities.showErrorMessage(
-					"URL (" + urlstring + ") cannot be opened\n(desktop integration problem, try to install a newer Java runtime).");
+			Utilities.showErrorMessage("URL (" + urlstring
+					+ ") cannot be opened\n(desktop integration problem, try to install a newer Java runtime).");
 		}
 	}
 
@@ -514,20 +514,27 @@ public class Utilities {
 	}
 
 	public static void showAboutDialog() {
-		Object[] options = { "Close", "Open Website" };
+		Object[] options = { "Close", "Documentation", "Project Website", "License" };
 		int result = JOptionPane.showOptionDialog(null, Constants.SHORT_NAME + " - " + Constants.LONG_NAME
-				+ "\nVersion " + Constants.VERSION + ".\n\n" + Constants.COPYRIGHT + "\n" + "Website: "
-				+ Constants.WEBSITE + "\n\n" + "This program is available free of charge.\n"
+				+ "\nVersion " + Constants.VERSION + ".\n\n" + Constants.COPYRIGHT + "\n" + "Website:\n["
+				+ Constants.WEBSITE + "]  \n\n" + "This program is available free of charge.\n"
 				+ "All liability shall be excluded. Use at your own risk!\n" + "Any commercial use is prohibited.\n\n"
 				+ "Code license: MIT License. Please read the full text \n"
-				+ "at https://opensource.org/licenses/mit-license.php.\n\n" + Constants.SHORT_NAME
-				+ " is inspired from LingQ (https://lingq.com) and\n" + "contains code from 'Learning With Texts'\n"
-				+ "(https://sourceforge.net/projects/lwt/).\n" + Constants.SHORT_NAME
-				+ " uses MigLayout (http://miglayout.com).\n\n" + "Currently used Java Runtime Engine: Version "
+				+ "at [https://opensource.org/licenses/MIT].\n\n" + Constants.SHORT_NAME
+				+ " is inspired from LingQ [https://lingq.com] and\n" + "contains code from 'Learning With Texts'\n"
+				+ "[https://sourceforge.net/projects/learning-with-texts/].\n" + Constants.SHORT_NAME
+				+ " uses MigLayout [http://miglayout.com].\n\n" + "Currently used Java Runtime Engine: Version "
 				+ System.getProperty("java.version") + ".", "About " + Constants.SHORT_NAME, JOptionPane.YES_NO_OPTION,
 				JOptionPane.INFORMATION_MESSAGE, Utilities.getIcon(), options, options[0]);
-		if (result == 1) {
+		if (result == 2) {
 			Utilities.openURLInDefaultBrowser(Constants.WEBSITE);
+			Utilities.showAboutDialog();
+		} else if (result == 3) {
+			Utilities.openURLInDefaultBrowser("https://opensource.org/licenses/MIT");
+			Utilities.showAboutDialog();
+		} else if (result == 1) {
+			Utilities.openURLInDefaultBrowser("https://foreign-language-text-reader.sourceforge.io");
+			Utilities.showAboutDialog();
 		}
 	}
 
