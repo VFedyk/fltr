@@ -134,6 +134,14 @@ public class Preferences {
 		return Preferences.getPreference("currText", "[None]");
 	}
 
+	public static int getCurrTextScrollPosition() {
+		String currText = getCurrText();
+		if (currText.equals(Constants.VOCAB_FILE_NAME))
+			return 0;
+		String currLang = getCurrLang();
+		return Preferences.getIntPreference("currTextScrollPosition[" + currLang + "|" + currText + "]", 0);
+	}
+
 	public static int getCurrVocabMaxResults() {
 		return Preferences.getIntPreference("currVocabMaxResults", 0);
 	}
@@ -192,13 +200,7 @@ public class Preferences {
 
 	private static int getIntPreference(String key, int def) {
 		String s = Preferences.getPreference(key.trim(), Integer.toString(def).trim());
-		int result;
-		try {
-			result = Integer.parseInt(s);
-		} catch (Exception e) {
-			result = def;
-		}
-		return result;
+		return Utilities.toInt(s, def);
 	}
 
 	private static String getPreference(String key, String def) {
@@ -297,6 +299,14 @@ public class Preferences {
 
 	public static void putCurrText(String s) {
 		Preferences.putPreference("currText", s);
+	}
+
+	public static void putCurrTextScrollPosition(int i) {
+		String currText = getCurrText();
+		if (currText.equals(Constants.VOCAB_FILE_NAME))
+			return;
+		String currLang = getCurrLang();
+		Preferences.putIntPreference("currTextScrollPosition[" + currLang + "|" + currText + "]", i);
 	}
 
 	public static void putCurrVocabMaxResult(int i) {

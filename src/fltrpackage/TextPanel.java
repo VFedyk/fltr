@@ -191,6 +191,7 @@ public class TextPanel extends JPanel {
 			setPreferredSize(this.getSize());
 			scrollPane.getVerticalScrollBar().setUnitIncrement((int) y / lines);
 			text.setCoordSet(true);
+			viewPort.setViewPosition(new Point(0, Preferences.getCurrTextScrollPosition()));
 		}
 	}
 

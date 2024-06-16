@@ -64,7 +64,7 @@ public class StartFrameListener implements ActionListener, WindowListener, Hiera
 			Language lang = FLTR.getLanguage();
 			if (lang != null) {
 				String currText = Preferences.getCurrText();
-				if (!currText.equals("<Vocabulary>")) {
+				if (!currText.equals(Constants.VOCAB_FILE_NAME)) {
 					File textFile = new File(lang.getTextDir(), currText + Constants.TEXT_FILE_EXTENSION);
 					if (textFile.isFile()) {
 						Utilities.openTextFileInEditor(textFile);
@@ -127,7 +127,7 @@ public class StartFrameListener implements ActionListener, WindowListener, Hiera
 							+ "\nfailed.\n\nCreating empty Words File…");
 				}
 				File textFile = null;
-				if (currText.equals("<Vocabulary>")) {
+				if (currText.equals(Constants.VOCAB_FILE_NAME)) {
 					if (terms.getData().size() > 0) {
 						VocabFilterSortSettingsDialog dlg = new VocabFilterSortSettingsDialog();
 						int dlgResult = dlg.showDialog();

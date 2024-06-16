@@ -593,6 +593,14 @@ public class Utilities {
 				JOptionPane.QUESTION_MESSAGE, Utilities.getIcon(), options, options[(dft ? 0 : 1)]) == 0;
 	}
 
+	public static int toInt(String text, int valueWhenInvalid) {
+		try {
+			return Integer.parseInt(text);
+		} catch (NumberFormatException e) {
+			return valueWhenInvalid;
+		}
+	}
+
 	public static boolean writeStringIntoFile(File f, String s) {
 		try {
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(f), Constants.ENCODING));

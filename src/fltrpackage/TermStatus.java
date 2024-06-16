@@ -116,16 +116,6 @@ public enum TermStatus {
 		}
 	}
 
-	public static TermStatus getStatusFromText(String s) {
-		int rightPar = s.lastIndexOf(')');
-		int leftPar = s.lastIndexOf('(');
-		int i = 1;
-		if ((leftPar > 0) && (rightPar > leftPar)) {
-			i = Integer.parseInt(s.substring(leftPar + 1, rightPar));
-		}
-		return TermStatus.getStatusFromCode(i);
-	}
-
 	private final int statusCode;
 
 	TermStatus(int statusCode) {

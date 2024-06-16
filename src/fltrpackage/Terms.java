@@ -320,13 +320,8 @@ public class Terms {
 					if (cnt >= 5) {
 						String status = cols[4].trim();
 						int intStatus = 1;
-						if (!status.isEmpty()) {
-							try {
-								intStatus = Integer.parseInt(status);
-							} catch (Exception e) {
-								intStatus = 1;
-							}
-						}
+						if (!status.isEmpty())
+							intStatus = Utilities.toInt(status, 1);
 						addTerm(new Term(cols[0].trim(), cols[1].trim(), cols[2].trim(), cols[3].trim(), intStatus));
 					} else if (cnt == 4) {
 						addTerm(new Term(cols[0].trim(), cols[1].trim(), cols[2].trim(), cols[3].trim(), 1));

@@ -278,7 +278,7 @@ public class TermFrame extends JFrame {
 		tfTranslation.getTextArea().setText(t.getTranslation());
 		tfRomanization.getTextArea().setText(t.getRomanization());
 		if (t.getSentence().trim().equals("")) {
-			if ((!Preferences.getCurrText().equals("<Vocabulary>")) && (!sentence.equals(""))) {
+			if ((!Preferences.getCurrText().equals(Constants.VOCAB_FILE_NAME)) && (!sentence.equals(""))) {
 				tfSentence.getTextArea().setText(sentence);
 			} else {
 				tfSentence.getTextArea().setText("");
@@ -305,7 +305,7 @@ public class TermFrame extends JFrame {
 		tfTerm.getTextArea().setText(term);
 		tfTranslation.getTextArea().setText("");
 		tfRomanization.getTextArea().setText("");
-		if (!Preferences.getCurrText().equals("<Vocabulary>")) {
+		if (!Preferences.getCurrText().equals(Constants.VOCAB_FILE_NAME)) {
 			tfSentence.getTextArea().setText(sentence);
 		} else {
 			tfSentence.getTextArea().setText("");

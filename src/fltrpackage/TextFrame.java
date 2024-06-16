@@ -66,6 +66,7 @@ public class TextFrame extends JFrame {
 		popupMenu = new TextPanelPopupMenu(listener);
 		getTextPanelScrollPane().getViewport().addMouseListener(listener);
 		getTextPanelScrollPane().getViewport().addMouseMotionListener(listener);
+
 		subPanel1.add(getTextPanelScrollPane());
 		subPanel1.setBorder(new EmptyBorder(0, 0, 0, 0));
 		mainPanel.add(subPanel1);

@@ -29,8 +29,8 @@ package fltrpackage;
 
 public class Constants {
 
-	public static final String SHORT_VERSION = "1.3.0";
-	public static final String VERSION = Constants.SHORT_VERSION + " (2021-06-09)";
+	public static final String SHORT_VERSION = "1.4.0";
+	public static final String VERSION = Constants.SHORT_VERSION + " (2021-06-14)";
 
 	public static final String SHORT_NAME = "FLTR";
 	public static final String LONG_NAME = "Foreign Language Text Reader";
@@ -58,6 +58,8 @@ public class Constants {
 	public static final String TEXT_FILE_EXTENSION = ".txt";
 	public static final int TEXT_FILE_EXTENSION_LENGTH = Constants.TEXT_FILE_EXTENSION.length();
 
+	public static final String VOCAB_FILE_NAME = "<Vocabulary>";
+
 	public static final int MAX_DATA_LENGTH_START_FRAME = 35;
 	public static final int MAX_TEXT_LENGTH_START_FRAME = 30;
 	public static final int MAX_LANG_LENGTH_START_FRAME = 30;
@@ -74,7 +76,7 @@ public class Constants {
 	public static final String TERMS_SEPARATOR = " · ";
 	public static final String URL_BEGIN_1 = "http://";
 	public static final String URL_BEGIN_2 = "https://";
-	public static final String EXEC_NOWAIT_END_MARKER = "&"; // Shell command (not-waiting)
+	public static final String EXEC_NOWAIT_END_MARKER = "&"; // Shell command (non-waiting)
 	public static final String TERM_PLACEHOLDER = "###";
 
 }

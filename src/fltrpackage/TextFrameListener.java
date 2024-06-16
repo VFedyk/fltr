@@ -420,6 +420,8 @@ public class TextFrameListener
 			}
 		}
 
+		Preferences.putCurrTextScrollPosition(frame.getTextPanel().getViewPort().getViewPosition().y);
+
 		TermFrame termFrame = FLTR.getTermFrame();
 		if (termFrame != null) {
 			termFrame.setVisible(false);

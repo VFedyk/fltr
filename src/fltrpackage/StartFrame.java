@@ -255,7 +255,7 @@ public class StartFrame extends JFrame {
 								currIndexT = cbText.getItemCount() - 1;
 							}
 						}
-						textMod = "<Vocabulary>";
+						textMod = Constants.VOCAB_FILE_NAME;
 						cbText.addItem(new ComboBoxItem(textMod, Constants.MAX_TEXT_LENGTH_START_FRAME));
 						if (textMod.equals(currText)) {
 							currIndexT = cbText.getItemCount() - 1;
@@ -264,7 +264,7 @@ public class StartFrame extends JFrame {
 							cbText.setSelectedIndex(currIndexT);
 						}
 						butStart.setEnabled(true);
-						butEditText.setEnabled((!Preferences.getCurrText().equals("<Vocabulary>")));
+						butEditText.setEnabled((!Preferences.getCurrText().equals(Constants.VOCAB_FILE_NAME)));
 					}
 				} else {
 					cbText.addItem(new ComboBoxItem("[None]", Constants.MAX_TEXT_LENGTH_START_FRAME));
