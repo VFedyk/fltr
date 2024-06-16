@@ -1,9 +1,9 @@
 /*
- *  
+ *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
- * 
- * Copyright (c) 2012 FLTR Developers.
- * 
+ *
+ * Copyright © 2012-2019 FLTR Developers.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -22,7 +22,7 @@
  * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 
 package fltrpackage;
@@ -99,19 +99,15 @@ public class Text {
 		if (fileName.substring(fileName.length() - 4).equals(".tmp")) {
 			r = "This Vocabulary Selection:";
 		} else {
-			r = "Text \""
-					+ fileName.substring(0, fileName.length()
-							- Constants.TEXT_FILE_EXTENSION_LENGTH) + "\":";
+			r = "Text \"" + fileName.substring(0, fileName.length() - Constants.TEXT_FILE_EXTENSION_LENGTH) + "\":";
 		}
 		r += "\nTOTAL (New Words & Saved Terms): " + String.valueOf(total);
-		r += "\nNew Words: " + String.valueOf(newcount)
-				+ Utilities.calcPercent(newcount, total) + "\n";
+		r += "\nNew Words: " + String.valueOf(newcount) + Utilities.calcPercent(newcount, total) + "\n";
 		for (TermStatus ts : TermStatus.getAllActive()) {
 			r += ts.getStatusText() + ": ";
 			if (stats.containsKey(ts)) {
 				int count = stats.get(ts);
-				r += String.valueOf(count)
-						+ Utilities.calcPercent(count, total) + "\n";
+				r += String.valueOf(count) + Utilities.calcPercent(count, total) + "\n";
 			} else {
 				r += "0" + Utilities.calcPercent(0, 0) + "\n";
 			}
@@ -154,8 +150,7 @@ public class Text {
 			int indexEnd = Math.max(markIndexStart, markIndexEnd) + 9;
 			indexStart = Math.max(0, indexStart);
 			indexEnd = Math.min(textItems.size() - 1, indexEnd);
-			s = (indexStart == 0 ? "" : "… ")
-					+ getTextRange(indexStart, indexEnd, true)
+			s = (indexStart == 0 ? "" : "… ") + getTextRange(indexStart, indexEnd, true)
 					+ (indexEnd == (textItems.size() - 1) ? "" : " …");
 			s = s.replace(term, "{" + term + "}");
 		} else {
@@ -254,8 +249,7 @@ public class Text {
 		HashMap<String, Integer> temp = new HashMap<String, Integer>();
 		for (int i = 0; i < textItems.size(); i++) {
 			if (textItems.get(i).getLink() == null) {
-				String w = textItems.get(i).getTextItemValue()
-						.replace(Constants.PARAGRAPH_MARKER, "");
+				String w = textItems.get(i).getTextItemValue().replace(Constants.PARAGRAPH_MARKER, "");
 				if (!w.isEmpty()) {
 					if (!temp.containsKey(w)) {
 						res++;
@@ -277,22 +271,21 @@ public class Text {
 	}
 
 	public void matchWithTerms() {
-		Terms terms = Application.getTerms();
+		Terms terms = FLTR.getTerms();
 		for (int i = 0; i < textItems.size();) {
 			i = terms.match(this, i);
 		}
 	}
 
-	private void printTerm(PrintWriter out, String term, String rom,
-			String trans, boolean justTerm, boolean rtl) {
+	private void printTerm(PrintWriter out, String term, String rom, String trans, boolean justTerm, boolean rtl) {
 		if (justTerm) {
-			out.print("<table class=\"ann\" border=\"0\"><tr><td"
-					+ (rtl ? " dir=\"rtl\"" : "") + "><div class=\"text\">");
+			out.print("<table class=\"ann\" border=\"0\"><tr><td" + (rtl ? " dir=\"rtl\"" : "")
+					+ "><div class=\"text\">");
 			out.print(term.equals("") ? "&nbsp;" : Utilities.escapeHTML(term));
 			out.print("</div></td></tr></table>");
 		} else {
-			out.print("<table class=\"ann\" border=\"0\"><tr><td"
-					+ (rtl ? " dir=\"rtl\"" : "") + "><div class=\"term\">");
+			out.print("<table class=\"ann\" border=\"0\"><tr><td" + (rtl ? " dir=\"rtl\"" : "")
+					+ "><div class=\"term\">");
 			out.print(term.equals("") ? "&nbsp;" : Utilities.escapeHTML(term));
 			out.print("</div><div class=\"rom\">");
 			out.print(rom.equals("") ? "&nbsp;" : Utilities.escapeHTML(rom));
@@ -306,55 +299,42 @@ public class Text {
 	public boolean saveTextToHTMLFileForReview(File f) {
 		boolean result = false;
 		if (f.canWrite()) {
-			String s1 = Utilities
-					.readFileFromJarIntoString(Constants.HEADER_HTML_PATH);
-			String s2 = Utilities
-					.readFileFromJarIntoString(Constants.TEXT_HTML_PATH);
+			String s1 = Utilities.readFileFromJarIntoString(Constants.HEADER_HTML_PATH);
+			String s2 = Utilities.readFileFromJarIntoString(Constants.TEXT_HTML_PATH);
 			if ((!s1.equals("")) && (!s2.equals(""))) {
 				try {
-					PrintWriter out = new PrintWriter(new OutputStreamWriter(
-							new FileOutputStream(f), Constants.ENCODING));
-					out.print(s1.replace("$$$$TITLE$$$$",
-							Utilities.escapeHTML(Preferences.getCurrText())));
+					PrintWriter out = new PrintWriter(
+							new OutputStreamWriter(new FileOutputStream(f), Constants.ENCODING));
+					out.print(s1.replace("$$$$TITLE$$$$", Utilities.escapeHTML(Preferences.getCurrText())));
 					out.print(Constants.EOL);
-					out.print(s2.replace("$$$$TITLE$$$$",
-							Utilities.escapeHTML(Preferences.getCurrText())));
+					out.print(s2.replace("$$$$TITLE$$$$", Utilities.escapeHTML(Preferences.getCurrText())));
 					out.print(Constants.EOL);
-					boolean rtl = Application.getLanguage().getRightToLeft();
+					boolean rtl = FLTR.getLanguage().getRightToLeft();
 					if (rtl) {
-						out.print("<div dir=\"rtl\" style=\"text-align:right\">"
-								+ Constants.EOL);
+						out.print("<div dir=\"rtl\" style=\"text-align:right\">" + Constants.EOL);
 					}
 					String termBuffer = "";
 					for (TextItem item : textItems) {
-						if (item.getTextItemValue().equals(
-								Constants.PARAGRAPH_MARKER)
+						if (item.getTextItemValue().equals(Constants.PARAGRAPH_MARKER)
 								&& item.getAfterItemValue().equals("")) {
 							out.print("<br />");
 							out.print(Constants.EOL);
 						} else {
 							if (item.getLink() == null) {
 								if (!item.getTextItemValue().trim().equals("")) {
-									printTerm(out, item.getTextItemValue(), "",
-											"", false, rtl);
+									printTerm(out, item.getTextItemValue(), "", "", false, rtl);
 								}
 								if (!item.getAfterItemValue().trim().equals("")) {
-									printTerm(out, item.getAfterItemValue(),
-											"", "", true, rtl);
+									printTerm(out, item.getAfterItemValue(), "", "", true, rtl);
 								}
 							} else {
 								Term t = item.getLink();
 								termBuffer += item.getTextItemValue();
 								if (item.isLastWord()) {
-									printTerm(out, termBuffer,
-											t.getRomanization(),
-											t.getTranslation(), false, rtl);
+									printTerm(out, termBuffer, t.getRomanization(), t.getTranslation(), false, rtl);
 									termBuffer = "";
-									if (!item.getAfterItemValue().trim()
-											.equals("")) {
-										printTerm(out,
-												item.getAfterItemValue(), "",
-												"", true, rtl);
+									if (!item.getAfterItemValue().trim().equals("")) {
+										printTerm(out, item.getAfterItemValue(), "", "", true, rtl);
 									}
 								} else {
 									termBuffer += item.getAfterItemValue();
@@ -408,7 +388,7 @@ public class Text {
 			}
 		}
 		if (r > 0) {
-			Application.getTerms().setDirty(true);
+			FLTR.getTerms().setDirty(true);
 		}
 		return r;
 	}
@@ -418,13 +398,11 @@ public class Text {
 	}
 
 	private void splitText() {
-		text = text.replace(Constants.EOL, " " + Constants.PARAGRAPH_MARKER
-				+ " ");
-		text = text.replace(Constants.UNIX_EOL, " "
-				+ Constants.PARAGRAPH_MARKER + " ");
+		text = text.replace(Constants.EOL, " " + Constants.PARAGRAPH_MARKER + " ");
+		text = text.replace(Constants.UNIX_EOL, " " + Constants.PARAGRAPH_MARKER + " ");
 		text = text.replace(Constants.TAB, " ");
 		text = text.trim();
-		if (Application.getLanguage().getMakeCharacterWord()) {
+		if (FLTR.getLanguage().getMakeCharacterWord()) {
 			Pattern p = Pattern.compile("([^\\s])");
 			Matcher m = p.matcher(text);
 			StringBuffer sb = new StringBuffer();
@@ -434,8 +412,7 @@ public class Text {
 			text = sb.toString();
 		}
 		text = text.replaceAll("\\s{2,}", " ");
-		String[] substitutions = Application.getLanguage()
-				.getCharSubstitutions().split("\\|");
+		String[] substitutions = FLTR.getLanguage().getCharSubstitutions().split("\\|");
 		for (String subst : substitutions) {
 			if (subst.contains("=")) {
 				String[] fromto = (subst + "=x").split("=");
@@ -445,9 +422,8 @@ public class Text {
 			}
 		}
 		text = text.trim();
-		Language lang = Application.getLanguage();
-		Pattern p = Pattern.compile("[^" + Constants.PARAGRAPH_MARKER
-				+ lang.getWordCharRegExp() + "]+");
+		Language lang = FLTR.getLanguage();
+		Pattern p = Pattern.compile("[^" + Constants.PARAGRAPH_MARKER + lang.getWordCharRegExp() + "]+");
 		Matcher m = p.matcher(text);
 		int start = 0;
 		boolean noSpaces = lang.getRemoveSpaces();
@@ -468,8 +444,7 @@ public class Text {
 						textItems.add(new TextItem("", s));
 					}
 				} else {
-					textItems.add(new TextItem(
-							text.substring(start, m.start()), s));
+					textItems.add(new TextItem(text.substring(start, m.start()), s));
 				}
 				start = m.end();
 			}
@@ -484,8 +459,7 @@ public class Text {
 	public String toString() {
 		String r = "";
 		for (TextItem item : textItems) {
-			r += "{" + item.getTextItemValue() + "|" + item.getAfterItemValue()
-					+ "} ";
+			r += "{" + item.getTextItemValue() + "|" + item.getAfterItemValue() + "} ";
 		}
 		return r;
 	}

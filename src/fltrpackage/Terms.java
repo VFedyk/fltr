@@ -1,9 +1,9 @@
 /*
- *  
+ *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
- * 
- * Copyright (c) 2012 FLTR Developers.
- * 
+ *
+ * Copyright © 2012-2019 FLTR Developers.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -22,7 +22,7 @@
  * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 
 package fltrpackage;
@@ -70,12 +70,10 @@ public class Terms {
 			int index = data.lastIndexOf(t);
 			keyIndex.put(t.getKey(), index);
 			int l = t.getWordCount();
-			String firstWord = t.getText().getTextItems().get(0)
-					.getTextItemValue().toLowerCase();
+			String firstWord = t.getText().getTextItems().get(0).getTextItemValue().toLowerCase();
 			TreeMap<Integer, ArrayList<Integer>> temp;
 			if (!keyIndex2.containsKey(firstWord)) {
-				temp = new TreeMap<Integer, ArrayList<Integer>>(
-						Collections.reverseOrder());
+				temp = new TreeMap<Integer, ArrayList<Integer>>(Collections.reverseOrder());
 				keyIndex2.put(firstWord, temp);
 			}
 			temp = keyIndex2.get(firstWord);
@@ -103,17 +101,13 @@ public class Terms {
 	}
 
 	private ArrayList<Term> getFilteredTermList() {
-		String statusFilter = "|"
-				+ Preferences.getCurrVocabStatusFilter().replaceAll("\\s", "")
-				+ "|";
+		String statusFilter = "|" + Preferences.getCurrVocabStatusFilter().replaceAll("\\s", "") + "|";
 		String textFilter = Preferences.getCurrVocabTextFilter();
-		String wordFilter = Utilities.createRegExpFromWildCard(Preferences
-				.getCurrVocabWordFilter());
+		String wordFilter = Utilities.createRegExpFromWildCard(Preferences.getCurrVocabWordFilter());
 		if (wordFilter.isEmpty()) {
 			wordFilter = ".*";
 		}
-		Pattern wordFilterPattern = Pattern.compile(wordFilter,
-				Pattern.UNICODE_CASE + Pattern.CASE_INSENSITIVE);
+		Pattern wordFilterPattern = Pattern.compile(wordFilter, Pattern.UNICODE_CASE + Pattern.CASE_INSENSITIVE);
 		ArrayList<Term> temp = new ArrayList<Term>(getData().size());
 		if (textFilter.equals("[All Terms]")) {
 			for (Term t : data) {
@@ -130,11 +124,10 @@ public class Terms {
 			}
 		} else {
 			boolean all = (textFilter.equals("[Terms In All Texts]"));
-			File textDir = Application.getLanguage().getTextDir();
+			File textDir = FLTR.getLanguage().getTextDir();
 			Vector<String> texts = Utilities.getTextFileList(textDir);
 			for (String fileName : texts) {
-				String textName = fileName.substring(0, fileName.length()
-						- Constants.TEXT_FILE_EXTENSION_LENGTH);
+				String textName = fileName.substring(0, fileName.length() - Constants.TEXT_FILE_EXTENSION_LENGTH);
 				if (all || textName.equals(textFilter)) {
 					File textFile = new File(textDir, fileName);
 					if (textFile.isFile()) {
@@ -145,11 +138,9 @@ public class Terms {
 							if (t != null) {
 								if (!temp.contains(t)) {
 									int status = t.getStatus().getStatusCode();
-									String charStatus = "|"
-											+ String.valueOf(status) + "|";
+									String charStatus = "|" + String.valueOf(status) + "|";
 									if (statusFilter.indexOf(charStatus) >= 0) {
-										Matcher m = wordFilterPattern.matcher(t
-												.getTerm());
+										Matcher m = wordFilterPattern.matcher(t.getTerm());
 										if (m.matches()) {
 											temp.add(t);
 										}
@@ -194,15 +185,13 @@ public class Terms {
 				}
 			}
 		}
-		String r = "Complete " + Application.getLanguage().getLangName()
-				+ " Vocabulary:\nTOTAL Saved Terms: " + String.valueOf(total)
-				+ "\n";
+		String r = "Complete " + FLTR.getLanguage().getLangName() + " Vocabulary:\nTOTAL Saved Terms: "
+				+ String.valueOf(total) + "\n";
 		for (TermStatus ts : TermStatus.getAllActive()) {
 			r += ts.getStatusText() + ": ";
 			if (stats.containsKey(ts)) {
 				int count = stats.get(ts);
-				r += String.valueOf(count)
-						+ Utilities.calcPercent(count, total) + "\n";
+				r += String.valueOf(count) + Utilities.calcPercent(count, total) + "\n";
 			} else {
 				r += "0" + Utilities.calcPercent(0, 0) + "\n";
 			}
@@ -221,8 +210,7 @@ public class Terms {
 	}
 
 	public ArrayList<Term> getNearlyEquals(String string, int max) {
-		ArrayList<char[]> stringBigram = FuzzySearch.calcBigram(string
-				.toLowerCase());
+		ArrayList<char[]> stringBigram = FuzzySearch.calcBigram(string.toLowerCase());
 		ArrayList<Term> temp = new ArrayList<Term>(data.size());
 		for (Term t : data) {
 			if (t != null) {
@@ -266,13 +254,11 @@ public class Terms {
 		if (temp.size() > 0) {
 			int maxRes = getMaxFilteredResults();
 			int count = 0;
-			String exportTemplate = Application.getLanguage()
-					.getExportTemplate();
+			String exportTemplate = FLTR.getLanguage().getExportTemplate();
 			StringBuilder sb = new StringBuilder();
 			String statusList = TermStatus.getAllStatuses();
 			for (Term t : temp) {
-				String ss = t
-						.makeExportTemplateLine(statusList, exportTemplate);
+				String ss = t.makeExportTemplateLine(statusList, exportTemplate);
 				if (!ss.equals("")) {
 					sb.append(ss);
 					sb.append(Constants.EOL);
@@ -293,19 +279,16 @@ public class Terms {
 
 	public boolean isExportTermsToFileOK() {
 		boolean r = false;
-		Language lang = Application.getLanguage();
-		if ((exportFile != null) && lang.getDoExport()
-				&& (!lang.getExportTemplate().isEmpty())
+		Language lang = FLTR.getLanguage();
+		if ((exportFile != null) && lang.getDoExport() && (!lang.getExportTemplate().isEmpty())
 				&& (!lang.getExportStatuses().isEmpty())) {
-			String statusList = ("|" + lang.getExportStatuses() + "|")
-					.replaceAll("\\s", "");
+			String statusList = ("|" + lang.getExportStatuses() + "|").replaceAll("\\s", "");
 			try {
-				PrintWriter out = new PrintWriter(new OutputStreamWriter(
-						new FileOutputStream(exportFile), Constants.ENCODING));
+				PrintWriter out = new PrintWriter(
+						new OutputStreamWriter(new FileOutputStream(exportFile), Constants.ENCODING));
 				for (Term t : data) {
 					if (t != null) {
-						String s = t.makeExportTemplateLine(statusList,
-								lang.getExportTemplate());
+						String s = t.makeExportTemplateLine(statusList, lang.getExportTemplate());
 						if (!s.equals("")) {
 							out.print(s);
 							out.print(Constants.EOL);
@@ -324,11 +307,11 @@ public class Terms {
 		boolean r;
 		this.file = file;
 		String parent = file.getParent();
-		String lang = Application.getLanguage().getLangName();
+		String lang = FLTR.getLanguage().getLangName();
 		exportFile = new File(parent, lang + Constants.EXPORT_WORDS_FILE_SUFFIX);
 		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					new FileInputStream(file), Constants.ENCODING));
+			BufferedReader in = new BufferedReader(
+					new InputStreamReader(new FileInputStream(file), Constants.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) {
 				String[] cols = line.split(Constants.TAB);
@@ -344,17 +327,13 @@ public class Terms {
 								intStatus = 1;
 							}
 						}
-						addTerm(new Term(cols[0].trim(), cols[1].trim(),
-								cols[2].trim(), cols[3].trim(), intStatus));
+						addTerm(new Term(cols[0].trim(), cols[1].trim(), cols[2].trim(), cols[3].trim(), intStatus));
 					} else if (cnt == 4) {
-						addTerm(new Term(cols[0].trim(), cols[1].trim(),
-								cols[2].trim(), cols[3].trim(), 1));
+						addTerm(new Term(cols[0].trim(), cols[1].trim(), cols[2].trim(), cols[3].trim(), 1));
 					} else if (cnt == 3) {
-						addTerm(new Term(cols[0].trim(), cols[1].trim(),
-								cols[2].trim(), "", 1));
+						addTerm(new Term(cols[0].trim(), cols[1].trim(), cols[2].trim(), "", 1));
 					} else if (cnt == 2) {
-						addTerm(new Term(cols[0].trim(), cols[1].trim(), "",
-								"", 1));
+						addTerm(new Term(cols[0].trim(), cols[1].trim(), "", "", 1));
 					} else { // cnt == 1
 						addTerm(new Term(cols[0].trim(), "?", "", "", 1));
 					}
@@ -375,8 +354,8 @@ public class Terms {
 		boolean r = false;
 		if (file != null) {
 			try {
-				PrintWriter out = new PrintWriter(new OutputStreamWriter(
-						new FileOutputStream(file), Constants.ENCODING));
+				PrintWriter out = new PrintWriter(
+						new OutputStreamWriter(new FileOutputStream(file), Constants.ENCODING));
 				for (Term t : data) {
 					if (t != null) {
 						out.print(t.toString());
@@ -396,15 +375,13 @@ public class Terms {
 		int nextIndex;
 		TextItem ti = text.getTextItems().get(index);
 		if (keyIndex2.containsKey(ti.getTextItemLowerCaseValue())) {
-			TreeMap<Integer, ArrayList<Integer>> temp = keyIndex2.get(ti
-					.getTextItemLowerCaseValue());
+			TreeMap<Integer, ArrayList<Integer>> temp = keyIndex2.get(ti.getTextItemLowerCaseValue());
 			for (Entry<Integer, ArrayList<Integer>> entry : temp.entrySet()) {
 				ArrayList<Integer> value = entry.getValue();
 				int count = entry.getKey().intValue();
 				for (Integer index2 : value) {
 					Term t = data.get(index2);
-					String text2 = text.getTextRange(index,
-							(index + count) - 1, false);
+					String text2 = text.getTextRange(index, (index + count) - 1, false);
 					if (t.getKey().equals(text2.toLowerCase())) {
 						nextIndex = index + count;
 						for (int i = index; i < nextIndex; i++) {
@@ -434,8 +411,7 @@ public class Terms {
 			data.set(index, null);
 			keyIndex.remove(key);
 			int l = t.getWordCount();
-			String firstWord = t.getText().getTextItems().get(0)
-					.getTextItemValue().toLowerCase();
+			String firstWord = t.getText().getTextItems().get(0).getTextItemValue().toLowerCase();
 			keyIndex2.get(firstWord).get(l).remove(Integer.valueOf(index));
 			dirty = true;
 		}
@@ -448,8 +424,8 @@ public class Terms {
 			if (temp.size() > 0) {
 				int maxRes = getMaxFilteredResults();
 				try {
-					PrintWriter out = new PrintWriter(new OutputStreamWriter(
-							new FileOutputStream(f), Constants.ENCODING));
+					PrintWriter out = new PrintWriter(
+							new OutputStreamWriter(new FileOutputStream(f), Constants.ENCODING));
 					int count = 0;
 					for (Term t : temp) {
 						out.print(t.getTerm());
@@ -475,44 +451,30 @@ public class Terms {
 			ArrayList<Term> temp = getFilteredTermList();
 			if (temp.size() > 0) {
 				int maxRes = getMaxFilteredResults();
-				String s1 = Utilities
-						.readFileFromJarIntoString(Constants.HEADER_HTML_PATH);
-				String s2 = Utilities
-						.readFileFromJarIntoString(Constants.VOCAB_HTML_PATH);
+				String s1 = Utilities.readFileFromJarIntoString(Constants.HEADER_HTML_PATH);
+				String s2 = Utilities.readFileFromJarIntoString(Constants.VOCAB_HTML_PATH);
 				if ((!s1.equals("")) && (!s2.equals(""))) {
 					try {
 						PrintWriter out = new PrintWriter(
-								new OutputStreamWriter(new FileOutputStream(f),
-										Constants.ENCODING));
-						out.print(s1.replace(
-								"$$$$TITLE$$$$",
-								Utilities.escapeHTML(Preferences.getCurrLang()
-										+ " Vocabulary")));
+								new OutputStreamWriter(new FileOutputStream(f), Constants.ENCODING));
+						out.print(s1.replace("$$$$TITLE$$$$",
+								Utilities.escapeHTML(Preferences.getCurrLang() + " Vocabulary")));
 						out.print(Constants.EOL);
-						out.print(s2.replace(
-								"$$$$TITLE$$$$",
-								Utilities.escapeHTML(Preferences.getCurrLang()
-										+ " Vocabulary")));
+						out.print(s2.replace("$$$$TITLE$$$$",
+								Utilities.escapeHTML(Preferences.getCurrLang() + " Vocabulary")));
 						out.print(Constants.EOL);
 						int count = 0;
-						boolean rtl = Application.getLanguage()
-								.getRightToLeft();
+						boolean rtl = FLTR.getLanguage().getRightToLeft();
 						for (Term t : temp) {
-							out.print("<tr><td"
-									+ (rtl ? " dir=\"rtl\" style=\"text-align:right\""
-											: "") + ">");
+							out.print("<tr><td" + (rtl ? " dir=\"rtl\" style=\"text-align:right\"" : "") + ">");
 							out.print(Utilities.escapeHTML(t.getTerm()));
 							out.print("</td><td>");
 							out.print(Utilities.escapeHTML(t.getRomanization()));
 							out.print("</td><td>");
-							String tr = Utilities
-									.escapeHTML(t.getTranslation());
+							String tr = Utilities.escapeHTML(t.getTranslation());
 							out.print(tr.equals("") ? "—" : tr);
-							out.print("</td><td"
-									+ (rtl ? " dir=\"rtl\" style=\"text-align:right\""
-											: "") + ">");
-							out.print(Utilities.escapeHTML(t.getSentence()
-									.replaceAll("\\{.+?\\}", " ____ ")));
+							out.print("</td><td" + (rtl ? " dir=\"rtl\" style=\"text-align:right\"" : "") + ">");
+							out.print(Utilities.escapeHTML(t.getSentence().replaceAll("\\{.+?\\}", " ____ ")));
 							out.print("</td><td>");
 							out.print(t.getStatus().getStatusCode());
 							out.print("</td><tr>" + Constants.EOL);
@@ -521,15 +483,13 @@ public class Terms {
 								break;
 							}
 						}
-						out.print("</tbody></table></div></body></html>"
-								+ Constants.EOL);
+						out.print("</tbody></table></div></body></html>" + Constants.EOL);
 						out.close();
 						result = true;
 					} catch (Exception e) {
 					}
 				} else {
-					Utilities
-							.showErrorMessage("Sorry - Unable to find HTML file.");
+					Utilities.showErrorMessage("Sorry - Unable to find HTML file.");
 				}
 			}
 		}

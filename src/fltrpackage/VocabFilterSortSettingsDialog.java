@@ -1,9 +1,9 @@
 /*
- *  
+ *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
- * 
- * Copyright (c) 2012 FLTR Developers.
- * 
+ *
+ * Copyright © 2012-2019 FLTR Developers.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -22,7 +22,7 @@
  * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 
 package fltrpackage;
@@ -57,7 +57,7 @@ public class VocabFilterSortSettingsDialog extends JDialog {
 	private JButton butNoStatusFilter;
 	private JTextField tfWordFilter;
 	private JButton butClearWordFilter;
-	private JComboBox cbTextFiles;
+	private JComboBox<ComboBoxItem> cbTextFiles;
 	private JRadioButton[] rbSortOptions;
 	private JRadioButton[] rbMaxResults;
 	private JButton butCancel;
@@ -83,16 +83,12 @@ public class VocabFilterSortSettingsDialog extends JDialog {
 
 		mainPanel.add(new JLabel("Status Filter:"), "right");
 		cbStatusFilter = new JCheckBox[TermStatus.values().length - 1];
-		String currStatuses = "|"
-				+ Preferences.getCurrVocabStatusFilter().replaceAll("\\s", "")
-				+ "|";
+		String currStatuses = "|" + Preferences.getCurrVocabStatusFilter().replaceAll("\\s", "") + "|";
 		for (int i = 0; i < cbStatusFilter.length; i++) {
-			String status = "|"
-					+ String.valueOf(i < 5 ? i + 1 : (i == 5 ? 98 : 99)) + "|";
+			String status = "|" + String.valueOf(i < 5 ? i + 1 : (i == 5 ? 98 : 99)) + "|";
 			cbStatusFilter[i] = new JCheckBox(String.valueOf(i + 1));
 			cbStatusFilter[i].setSelected(currStatuses.indexOf(status) >= 0);
-			mainPanel.add(cbStatusFilter[i], (i == 0 ? "split"
-					: (i == (cbStatusFilter.length - 1) ? "wrap" : "")));
+			mainPanel.add(cbStatusFilter[i], (i == 0 ? "split" : (i == (cbStatusFilter.length - 1) ? "wrap" : "")));
 		}
 		cbStatusFilter[5].setText("Ign");
 		cbStatusFilter[6].setText("WKn");
@@ -117,14 +113,11 @@ public class VocabFilterSortSettingsDialog extends JDialog {
 		mainPanel.add(new JLabel("   Joker: * and ?"), "wrap");
 
 		mainPanel.add(new JLabel("Text Filter:"), "right");
-		cbTextFiles = new JComboBox(new Vector<ComboBoxItem>());
-		Vector<String> texts = Utilities.getTextFileList(Application
-				.getLanguage().getTextDir());
+		cbTextFiles = new JComboBox<ComboBoxItem>(new Vector<ComboBoxItem>());
+		Vector<String> texts = Utilities.getTextFileList(FLTR.getLanguage().getTextDir());
 		String textCurr = Preferences.getCurrVocabTextFilter();
-		cbTextFiles.addItem(new ComboBoxItem("[All Terms]",
-				Constants.MAX_DATA_LENGTH_START_FRAME));
-		cbTextFiles.addItem(new ComboBoxItem("[Terms In All Texts]",
-				Constants.MAX_DATA_LENGTH_START_FRAME));
+		cbTextFiles.addItem(new ComboBoxItem("[All Terms]", Constants.MAX_DATA_LENGTH_START_FRAME));
+		cbTextFiles.addItem(new ComboBoxItem("[Terms In All Texts]", Constants.MAX_DATA_LENGTH_START_FRAME));
 		if (textCurr.equals("[All Terms]")) {
 			cbTextFiles.setSelectedIndex(0);
 		} else if (textCurr.equals("[Terms In All Texts]")) {
@@ -132,10 +125,8 @@ public class VocabFilterSortSettingsDialog extends JDialog {
 		}
 		String textMod;
 		for (String text : texts) {
-			textMod = text.substring(0, text.length()
-					- Constants.TEXT_FILE_EXTENSION_LENGTH);
-			cbTextFiles.addItem(new ComboBoxItem(textMod,
-					Constants.MAX_DATA_LENGTH_START_FRAME));
+			textMod = text.substring(0, text.length() - Constants.TEXT_FILE_EXTENSION_LENGTH);
+			cbTextFiles.addItem(new ComboBoxItem(textMod, Constants.MAX_DATA_LENGTH_START_FRAME));
 			if (textCurr.equals(textMod)) {
 				cbTextFiles.setSelectedIndex(cbTextFiles.getItemCount() - 1);
 			}
@@ -170,8 +161,7 @@ public class VocabFilterSortSettingsDialog extends JDialog {
 			rbMaxResults[i] = new JRadioButton(maxResTexts[i]);
 			rbMaxResults[i].setSelected(currMaxResults == i);
 			bgMaxResults.add(rbMaxResults[i]);
-			mainPanel.add(rbMaxResults[i], (i == 0 ? "split, " : "")
-					+ "gapbottom 10px" + (i == 5 ? ", wrap" : ""));
+			mainPanel.add(rbMaxResults[i], (i == 0 ? "split, " : "") + "gapbottom 10px" + (i == 5 ? ", wrap" : ""));
 		}
 
 		butCancel = new JButton("Cancel");
@@ -191,18 +181,15 @@ public class VocabFilterSortSettingsDialog extends JDialog {
 
 		JRootPane rootPane = getRootPane();
 		rootPane.setDefaultButton(butGo);
-		rootPane.registerKeyboardAction(listener,
-				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+		rootPane.registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 		pack();
 		setResizable(false);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation((d.width - this.getSize().width) / 2,
-				(d.height - this.getSize().height) / 2);
+		this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
 		if (!Utilities.isMac()) {
-			setIconImage(Toolkit.getDefaultToolkit().getImage(
-					this.getClass().getResource(Constants.ICONPATH)));
+			setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource(Constants.ICONPATH)));
 		}
 	}
 
@@ -238,7 +225,7 @@ public class VocabFilterSortSettingsDialog extends JDialog {
 		return cbStatusFilter;
 	}
 
-	public JComboBox getCbTextFiles() {
+	public JComboBox<ComboBoxItem> getCbTextFiles() {
 		return cbTextFiles;
 	}
 

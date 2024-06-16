@@ -1,9 +1,9 @@
 /*
- *  
+ *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
- * 
- * Copyright (c) 2012 FLTR Developers.
- * 
+ *
+ * Copyright © 2012-2019 FLTR Developers.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -22,7 +22,7 @@
  * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 
 package fltrpackage;
@@ -85,13 +85,10 @@ public class NewTextDialog extends JDialog {
 		textArea.setEditable(true);
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
-		textArea.setFont(new Font(
-				"Dialog",
-				Font.PLAIN,
+		textArea.setFont(new Font("Dialog", Font.PLAIN,
 				Math.round((15.0f * Preferences.getCurrDialogFontSizePercent()) / 100.0f)));
 		textAreaScrollPane = new JScrollPane(textArea);
-		textAreaScrollPane
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		textAreaScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		subPanel2.add(textAreaScrollPane);
 		mainPanel.add(subPanel2);
 
@@ -127,18 +124,15 @@ public class NewTextDialog extends JDialog {
 
 		JRootPane rootPane = getRootPane();
 		rootPane.setDefaultButton(butSave);
-		rootPane.registerKeyboardAction(listener,
-				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+		rootPane.registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 		pack();
 		setResizable(false);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation((d.width - this.getSize().width) / 2,
-				(d.height - this.getSize().height) / 2);
+		this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
 		if (!Utilities.isMac()) {
-			setIconImage(Toolkit.getDefaultToolkit().getImage(
-					this.getClass().getResource(Constants.ICONPATH)));
+			setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource(Constants.ICONPATH)));
 		}
 
 		tfTextName.requestFocusInWindow();

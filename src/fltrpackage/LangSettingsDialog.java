@@ -1,9 +1,9 @@
 /*
- *  
+ *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
- * 
- * Copyright (c) 2012 FLTR Developers.
- * 
+ *
+ * Copyright © 2012-2019 FLTR Developers.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -22,7 +22,7 @@
  * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 
 package fltrpackage;
@@ -53,8 +53,7 @@ public class LangSettingsDialog extends JDialog {
 	public LangSettingsDialog() {
 		super();
 		setModal(true);
-		setTitle("Language Settings - "
-				+ Application.getLanguage().getLangName());
+		setTitle("Language Settings - " + FLTR.getLanguage().getLangName());
 		listener = new LangSettingsDialogListener(this);
 		addWindowListener(listener);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -66,36 +65,28 @@ public class LangSettingsDialog extends JDialog {
 
 		settingsTableModel = new LangSettingsTableModel();
 		settingsTable = new JTable(settingsTableModel);
-		settingsTable
-				.setPreferredScrollableViewportSize(new Dimension(Preferences
-						.scaleIntValue(450), Preferences.scaleIntValue(380)));
+		settingsTable.setPreferredScrollableViewportSize(
+				new Dimension(Preferences.scaleIntValue(450), Preferences.scaleIntValue(380)));
 		settingsTable.setFillsViewportHeight(true);
 		settingsTable.getTableHeader().setReorderingAllowed(false);
-		settingsTable.getColumnModel().getColumn(1)
-				.setPreferredWidth(Preferences.scaleIntValue(230));
-		settingsTable.setRowHeight(Preferences.scaleIntValue(settingsTable
-				.getRowHeight()));
+		settingsTable.getColumnModel().getColumn(1).setPreferredWidth(Preferences.scaleIntValue(230));
+		settingsTable.setRowHeight(Preferences.scaleIntValue(settingsTable.getRowHeight()));
 		settingsTableScrollPane = new JScrollPane(settingsTable);
-		settingsTableScrollPane
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		settingsTableScrollPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		settingsTableScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		settingsTableScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		mainPanel.add(settingsTableScrollPane);
 
 		getContentPane().add(mainPanel);
 
-		getRootPane().registerKeyboardAction(listener,
-				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+		getRootPane().registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 		pack();
 		setResizable(false);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation((d.width - this.getSize().width) / 2,
-				(d.height - this.getSize().height) / 2);
+		this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
 		if (!Utilities.isMac()) {
-			setIconImage(Toolkit.getDefaultToolkit().getImage(
-					this.getClass().getResource(Constants.ICONPATH)));
+			setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource(Constants.ICONPATH)));
 		}
 	}
 

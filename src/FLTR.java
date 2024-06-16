@@ -25,59 +25,15 @@
  *
  */
 
-package fltrpackage;
+public class FLTR {
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-
-import javax.swing.JTable;
-
-public class LangSettingsDialogListener implements WindowListener, ActionListener {
-
-	private LangSettingsDialog frame;
-
-	public LangSettingsDialogListener(LangSettingsDialog frame) {
-		super();
-		this.frame = frame;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		frame.dispose();
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		JTable t = frame.getLangSettingsTable();
-		if (t.isEditing()) {
-			t.getCellEditor().stopCellEditing();
-		}
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
+	public static void main(String[] args) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				fltrpackage.FLTR.createAndShowGUI();
+			}
+		});
 	}
 
 }

@@ -1,9 +1,9 @@
 /*
- *  
+ *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
- * 
- * Copyright (c) 2012 FLTR Developers.
- * 
+ *
+ * Copyright © 2012-2019 FLTR Developers.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -22,7 +22,7 @@
  * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 
 package fltrpackage;
@@ -36,8 +36,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 
-public class StartFrameListener implements ActionListener, WindowListener,
-		HierarchyBoundsListener {
+public class StartFrameListener implements ActionListener, WindowListener, HierarchyBoundsListener {
 
 	private StartFrame frame;
 
@@ -50,8 +49,7 @@ public class StartFrameListener implements ActionListener, WindowListener,
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(frame.getButChooseMainDir())) {
-			File dir = Utilities.selectDirectory(frame, "Select "
-					+ Constants.SHORT_NAME + " data directory…",
+			File dir = Utilities.selectDirectory(frame, "Select " + Constants.SHORT_NAME + " data directory…",
 					System.getProperty("user.home"));
 			if ((dir != null) && dir.isDirectory()) {
 				Preferences.putCurrMainDir(dir.getAbsolutePath());
@@ -62,13 +60,12 @@ public class StartFrameListener implements ActionListener, WindowListener,
 		} else if (o.equals(frame.getButAbout())) {
 			Utilities.showAboutDialog();
 		} else if (o.equals(frame.getButEditText())) {
-			Application.checkAndInitBaseDirAndLanguage();
-			Language lang = Application.getLanguage();
+			FLTR.checkAndInitBaseDirAndLanguage();
+			Language lang = FLTR.getLanguage();
 			if (lang != null) {
 				String currText = Preferences.getCurrText();
 				if (!currText.equals("<Vocabulary>")) {
-					File textFile = new File(lang.getTextDir(), currText
-							+ Constants.TEXT_FILE_EXTENSION);
+					File textFile = new File(lang.getTextDir(), currText + Constants.TEXT_FILE_EXTENSION);
 					if (textFile.isFile()) {
 						Utilities.openTextFileInEditor(textFile);
 						return;
@@ -77,19 +74,18 @@ public class StartFrameListener implements ActionListener, WindowListener,
 			}
 			Utilities.showErrorMessage("Not possible.");
 		} else if (o.equals(frame.getButOpenMainDir())) {
-			Application.checkAndInitBaseDirAndLanguage();
-			File dir = Application.getBaseDir();
+			FLTR.checkAndInitBaseDirAndLanguage();
+			File dir = FLTR.getBaseDir();
 			if (dir != null) {
 				Utilities.openDirectoryInFileExplorer(dir);
 			} else {
 				Utilities.showErrorMessage("Not possible.");
 			}
 		} else if (o.equals(frame.getButNewText())) {
-			Application.checkAndInitBaseDirAndLanguage();
-			Language lang = Application.getLanguage();
+			FLTR.checkAndInitBaseDirAndLanguage();
+			Language lang = FLTR.getLanguage();
 			if (lang != null) {
-				NewTextDialog dlg = new NewTextDialog(Utilities
-						.getClipBoardText().trim());
+				NewTextDialog dlg = new NewTextDialog(Utilities.getClipBoardText().trim());
 				dlg.showDialog();
 			} else {
 				Utilities.showErrorMessage("Not possible.");
@@ -98,8 +94,8 @@ public class StartFrameListener implements ActionListener, WindowListener,
 			GeneralSettingsDialog f = new GeneralSettingsDialog();
 			f.setVisible(true);
 		} else if (o.equals(frame.getButEditLang())) {
-			Application.checkAndInitBaseDirAndLanguage();
-			Language lang = Application.getLanguage();
+			FLTR.checkAndInitBaseDirAndLanguage();
+			Language lang = FLTR.getLanguage();
 			if (lang != null) {
 				LangSettingsDialog f = new LangSettingsDialog();
 				f.setVisible(true);
@@ -107,8 +103,8 @@ public class StartFrameListener implements ActionListener, WindowListener,
 				Utilities.showErrorMessage("Not possible.");
 			}
 		} else if (o.equals(frame.getButNewLang())) {
-			Application.checkAndInitBaseDirAndLanguage();
-			if (Application.getBaseDir() != null) {
+			FLTR.checkAndInitBaseDirAndLanguage();
+			if (FLTR.getBaseDir() != null) {
 				NewLanguageDialog dlg = new NewLanguageDialog();
 				dlg.showDialog();
 			} else {
@@ -117,19 +113,17 @@ public class StartFrameListener implements ActionListener, WindowListener,
 		} else if (o.equals(frame.getButRefresh())) {
 			frame.setDataAndPack();
 		} else if (o.equals(frame.getButStart())) {
-			Application.checkAndInitBaseDirAndLanguage();
-			Language lang = Application.getLanguage();
+			FLTR.checkAndInitBaseDirAndLanguage();
+			Language lang = FLTR.getLanguage();
 			if (lang != null) {
 				String currLang = lang.getLangName();
 				String currText = Preferences.getCurrText();
 				File langdir = lang.getTextDir();
-				File termFile = new File(Application.getBaseDir(), currLang
-						+ Constants.WORDS_FILE_SUFFIX);
+				File termFile = new File(FLTR.getBaseDir(), currLang + Constants.WORDS_FILE_SUFFIX);
 				Terms terms = new Terms();
-				Application.setTerms(terms);
+				FLTR.setTerms(terms);
 				if (!terms.isLoadTermsFromFileOK(termFile)) {
-					Utilities.showErrorMessage("Loading Words File\n"
-							+ termFile.getAbsolutePath()
+					Utilities.showErrorMessage("Loading Words File\n" + termFile.getAbsolutePath()
 							+ "\nfailed.\n\nCreating empty Words File…");
 				}
 				File textFile = null;
@@ -138,47 +132,38 @@ public class StartFrameListener implements ActionListener, WindowListener,
 						VocabFilterSortSettingsDialog dlg = new VocabFilterSortSettingsDialog();
 						int dlgResult = dlg.showDialog();
 						if (dlgResult == 1) {
-							textFile = Utilities.CreateTempFile("Vocabulary_",
-									".tmp", langdir);
+							textFile = Utilities.CreateTempFile("Vocabulary_", ".tmp", langdir);
 							if (!terms.saveTermsToFileForReview(textFile)) {
-								Utilities
-										.showErrorMessage("No Vocabulary to display.\nChange your Vocabulary Filters and try again.");
+								Utilities.showErrorMessage(
+										"No Vocabulary to display.\nChange your Vocabulary Filters and try again.");
 								return;
 							}
 						} else if (dlgResult == 2) {
-							textFile = Utilities.CreateTempFile("Vocabulary_",
-									".htm", langdir);
+							textFile = Utilities.CreateTempFile("Vocabulary_", ".htm", langdir);
 							if (!terms.saveTermsToHTMLFileForReview(textFile)) {
-								Utilities
-										.showErrorMessage("No Vocabulary to display.\nChange your Vocabulary Filters and try again.");
+								Utilities.showErrorMessage(
+										"No Vocabulary to display.\nChange your Vocabulary Filters and try again.");
 								return;
 							} else {
-								Utilities.openURLInDefaultBrowser(textFile
-										.toURI().toString());
+								Utilities.openURLInDefaultBrowser(textFile.toURI().toString());
 								return;
 							}
 						} else if (dlgResult == 3) {
 							String s = terms.getTermsForExport();
 							if (s.trim().equals("")) {
-								Utilities
-										.showErrorMessage("No Vocabulary to export.\nChange your Vocabulary Filters and try again.");
+								Utilities.showErrorMessage(
+										"No Vocabulary to export.\nChange your Vocabulary Filters and try again.");
 							} else {
-								File f = Utilities.saveFileDialog(frame,
-										"Save Export File",
+								File f = Utilities.saveFileDialog(frame, "Save Export File",
 										Utilities.getDownloadsDirectoryPath());
 								if (f == null) {
-									Utilities
-											.showInfoMessage("Action aborted. Nothing exported.");
+									Utilities.showInfoMessage("Action aborted. Nothing exported.");
 								} else {
 									if (Utilities.writeStringIntoFile(f, s)) {
-										Utilities.showInfoMessage("Export to "
-												+ f.getAbsolutePath()
-												+ " successful.");
+										Utilities.showInfoMessage("Export to " + f.getAbsolutePath() + " successful.");
 									} else {
-										Utilities
-												.showErrorMessage("Export to "
-														+ f.getAbsolutePath()
-														+ " NOT successful.\nPlease try again.");
+										Utilities.showErrorMessage("Export to " + f.getAbsolutePath()
+												+ " NOT successful.\nPlease try again.");
 									}
 								}
 							}
@@ -191,37 +176,33 @@ public class StartFrameListener implements ActionListener, WindowListener,
 						return;
 					}
 				} else {
-					textFile = new File(langdir, currText
-							+ Constants.TEXT_FILE_EXTENSION);
+					textFile = new File(langdir, currText + Constants.TEXT_FILE_EXTENSION);
 				}
 				if (textFile.isFile()) {
-					Application.setText(new Text(textFile));
-					Application.getText().matchWithTerms();
-					TextFrame textFrame = Application.getTextFrame();
+					FLTR.setText(new Text(textFile));
+					FLTR.getText().matchWithTerms();
+					TextFrame textFrame = FLTR.getTextFrame();
 					if (textFrame != null) {
 						textFrame.dispose();
 					}
 					textFrame = new TextFrame();
-					Application.setTextFrame(textFrame);
+					FLTR.setTextFrame(textFrame);
 					frame.setVisible(false);
 					textFrame.setVisible(true);
 				} else {
-					Utilities.showErrorMessage(textFile.getAbsolutePath()
-							+ " not possible (Deleted?).");
+					Utilities.showErrorMessage(textFile.getAbsolutePath() + " not possible (Deleted?).");
 				}
 			} else {
 				Utilities.showErrorMessage("Not possible.");
 			}
 		} else if (o.equals(frame.getCbLang())) {
 			if (frame.getCbLang().getSelectedItem() != null) {
-				Preferences.putCurrLang(((ComboBoxItem) frame.getCbLang()
-						.getSelectedItem()).getText());
+				Preferences.putCurrLang(((ComboBoxItem) frame.getCbLang().getSelectedItem()).getText());
 				frame.setDataAndPack();
 			}
 		} else if (o.equals(frame.getCbText())) {
 			if (frame.getCbText().getSelectedItem() != null) {
-				Preferences.putCurrText(((ComboBoxItem) frame.getCbText()
-						.getSelectedItem()).getText());
+				Preferences.putCurrText(((ComboBoxItem) frame.getCbText().getSelectedItem()).getText());
 				frame.setDataAndPack();
 			}
 		}
@@ -248,7 +229,7 @@ public class StartFrameListener implements ActionListener, WindowListener,
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		Application.stop();
+		FLTR.stop();
 	}
 
 	@Override

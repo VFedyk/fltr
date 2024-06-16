@@ -1,9 +1,9 @@
 /*
- *  
+ *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
- * 
- * Copyright (c) 2012 FLTR Developers.
- * 
+ *
+ * Copyright © 2012-2019 FLTR Developers.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -22,7 +22,7 @@
  * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 
 package fltrpackage;
@@ -40,6 +40,8 @@ import java.util.StringTokenizer;
 public class Preferences {
 
 	public static final String FILE_IDENTIFIER = "FLTRPREFS";
+
+	private static Preferences instance = null;
 
 	private static boolean getBoolPreference(String key, boolean def) {
 		return (Preferences.getIntPreference(key, (def ? 1 : 0)) != 0);
@@ -122,8 +124,7 @@ public class Preferences {
 	}
 
 	private static int getIntPreference(String key, int def) {
-		String s = Preferences.getPreference(key.trim(), Integer.toString(def)
-				.trim());
+		String s = Preferences.getPreference(key.trim(), Integer.toString(def).trim());
 		int result;
 		try {
 			result = Integer.parseInt(s);
@@ -239,28 +240,25 @@ public class Preferences {
 		Preferences.instance.savePreferences();
 	}
 
-	private Hashtable<String, String> prefs;
-	private String fileName;
-
-	private static Preferences instance = null;
-
 	public static int scaleIntValue(int i) {
-		return (int) (((float) i * (float) Preferences
-				.getCurrDialogFontSizePercent()) / 100.0f);
+		return (int) (((float) i * (float) Preferences.getCurrDialogFontSizePercent()) / 100.0f);
 	}
+
+	private Hashtable<String, String> prefs;
+
+	private String fileName;
 
 	private Preferences() {
 		prefs = new Hashtable<String, String>();
 		fileName = Constants.PREF_FILE_PATH;
 		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					new FileInputStream(fileName), Constants.ENCODING));
+			BufferedReader in = new BufferedReader(
+					new InputStreamReader(new FileInputStream(fileName), Constants.ENCODING));
 			String line = in.readLine();
 			if (line != null) {
 				if (line.trim().equalsIgnoreCase(Preferences.FILE_IDENTIFIER)) {
 					while ((line = in.readLine()) != null) {
-						StringTokenizer st = new StringTokenizer(line,
-								Constants.TAB);
+						StringTokenizer st = new StringTokenizer(line, Constants.TAB);
 						int cnt = st.countTokens();
 						if (cnt >= 2) {
 							String key = st.nextToken().trim();
@@ -278,8 +276,8 @@ public class Preferences {
 	private void savePreferences() {
 		Enumeration<String> pk = prefs.keys();
 		try {
-			PrintWriter out = new PrintWriter(new OutputStreamWriter(
-					new FileOutputStream(fileName), Constants.ENCODING));
+			PrintWriter out = new PrintWriter(
+					new OutputStreamWriter(new FileOutputStream(fileName), Constants.ENCODING));
 			out.print(Preferences.FILE_IDENTIFIER + Constants.EOL);
 			while (pk.hasMoreElements()) {
 				String key = pk.nextElement().trim();

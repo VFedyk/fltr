@@ -1,9 +1,9 @@
 /*
- *  
+ *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
- * 
- * Copyright (c) 2012 FLTR Developers.
- * 
+ *
+ * Copyright © 2012-2019 FLTR Developers.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -22,7 +22,7 @@
  * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 
 package fltrpackage;
@@ -43,8 +43,8 @@ import java.io.File;
 import javax.swing.JMenuItem;
 import javax.swing.JViewport;
 
-public class TextFrameListener implements WindowListener, MouseListener,
-		MouseMotionListener, HierarchyBoundsListener, ActionListener {
+public class TextFrameListener
+		implements WindowListener, MouseListener, MouseMotionListener, HierarchyBoundsListener, ActionListener {
 
 	private TextFrame frame;
 	private boolean dragging;
@@ -59,41 +59,34 @@ public class TextFrameListener implements WindowListener, MouseListener,
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o instanceof JMenuItem) {
-			Terms terms = Application.getTerms();
+			Terms terms = FLTR.getTerms();
 			JMenuItem mi = (JMenuItem) o;
-			TermFrame termFrame = Application.getTermFrame();
+			TermFrame termFrame = FLTR.getTermFrame();
 			if (termFrame == null) {
 				termFrame = new TermFrame();
-				Application.setTermFrame(termFrame);
+				FLTR.setTermFrame(termFrame);
 			}
 			if (((String) mi.getClientProperty("action")).equals("edit")) {
 				termFrame.startEdit((Term) mi.getClientProperty("term"), "");
-			} else if (((String) mi.getClientProperty("action"))
-					.equals("browser")) {
-				File textFile = Utilities.CreateTempFile("Text_", ".htm",
-						Application.getLanguage().getTextDir());
-				if (!Application.getText()
-						.saveTextToHTMLFileForReview(textFile)) {
+			} else if (((String) mi.getClientProperty("action")).equals("browser")) {
+				File textFile = Utilities.CreateTempFile("Text_", ".htm", FLTR.getLanguage().getTextDir());
+				if (!FLTR.getText().saveTextToHTMLFileForReview(textFile)) {
 					Utilities.showErrorMessage("No Text to display.");
 				} else {
-					Utilities.openURLInDefaultBrowser(textFile.toURI()
-							.toString());
+					Utilities.openURLInDefaultBrowser(textFile.toURI().toString());
 				}
 			} else if (((String) mi.getClientProperty("action")).equals("info")) {
-				Utilities.showInfoMessage(Application.getText().getInfo()
-						+ "-----------------------\n" + terms.getInfo());
+				Utilities.showInfoMessage(FLTR.getText().getInfo() + "-----------------------\n" + terms.getInfo());
 			} else if (((String) mi.getClientProperty("action")).equals("miss")) {
-				int missSent = Application.getText().setMissingSentences();
-				Utilities.showInfoMessage(String.valueOf(missSent)
-						+ " Sentences in existent Terms added.");
-			} else if (((String) mi.getClientProperty("action"))
-					.equals("delete")) {
+				int missSent = FLTR.getText().setMissingSentences();
+				Utilities.showInfoMessage(String.valueOf(missSent) + " Sentences in existent Terms added.");
+			} else if (((String) mi.getClientProperty("action")).equals("delete")) {
 				terms.removeTerm((Term) mi.getClientProperty("term"));
-				Application.getText().matchWithTerms();
+				FLTR.getText().matchWithTerms();
 				frame.getTextPanel().repaint();
 				frame.getTextPanel().requestFocus();
 			} else if (((String) mi.getClientProperty("action")).equals("new")) {
-				Text t = Application.getText();
+				Text t = FLTR.getText();
 				TextItem ti = (TextItem) mi.getClientProperty("textitem");
 				String s = ti.getTextItemValue();
 				int index = t.getTextItems().indexOf(ti);
@@ -104,60 +97,51 @@ public class TextFrameListener implements WindowListener, MouseListener,
 			} else if (((String) mi.getClientProperty("action")).equals("dict")) {
 				String word = (String) mi.getClientProperty("word");
 				int link = ((Integer) mi.getClientProperty("link")).intValue();
-				Application.getLanguage().lookupWordInBrowser(word, link, true);
-			} else if (((String) mi.getClientProperty("action"))
-					.equals("setstatus")) {
+				FLTR.getLanguage().lookupWordInBrowser(word, link, true);
+			} else if (((String) mi.getClientProperty("action")).equals("setstatus")) {
 				Term t = (Term) mi.getClientProperty("term");
 				TermStatus ts = (TermStatus) mi.getClientProperty("status");
 				t.setStatus(ts);
 				terms.setDirty(true);
-				if (t.getTranslation().isEmpty()
-						&& (ts.compareTo(TermStatus.Known) <= 0)) {
-					Utilities
-							.showInfoMessage("Translation must not be empty,\nunless status is 'Ignored' or 'Well Known'.\nPlease correct this…");
-					termFrame
-							.startEdit((Term) mi.getClientProperty("term"), "");
+				if (t.getTranslation().isEmpty() && (ts.compareTo(TermStatus.Known) <= 0)) {
+					Utilities.showInfoMessage(
+							"Translation must not be empty,\nunless status is 'Ignored' or 'Well Known'.\nPlease correct this…");
+					termFrame.startEdit((Term) mi.getClientProperty("term"), "");
 				}
 				frame.getTextPanel().repaint();
 				frame.getTextPanel().requestFocus();
-			} else if (((String) mi.getClientProperty("action"))
-					.equals("knowthis")) {
+			} else if (((String) mi.getClientProperty("action")).equals("knowthis")) {
 				TermStatus ts = (TermStatus) mi.getClientProperty("status");
-				Text t = Application.getText();
+				Text t = FLTR.getText();
 				TextItem ti = (TextItem) mi.getClientProperty("textitem");
 				String s = ti.getTextItemValue();
 				int index = t.getTextItems().indexOf(ti);
 				t.setMarkIndexStart(index);
 				t.setMarkIndexEnd(index);
 				t.setRangeMarked(true);
-				terms.addTerm(new Term(s, "", t.getMarkedTextSentence(s)
-						.replace(Constants.PARAGRAPH_MARKER, ""), "", ts
-						.getStatusCode()));
-				Application.getText().matchWithTerms();
+				terms.addTerm(new Term(s, "", t.getMarkedTextSentence(s).replace(Constants.PARAGRAPH_MARKER, ""), "",
+						ts.getStatusCode()));
+				FLTR.getText().matchWithTerms();
 				frame.getTextPanel().repaint();
 				frame.getTextPanel().requestFocus();
-			} else if (((String) mi.getClientProperty("action"))
-					.equals("knowall")) {
+			} else if (((String) mi.getClientProperty("action")).equals("knowall")) {
 				TermStatus ts = (TermStatus) mi.getClientProperty("status");
-				Text t = Application.getText();
+				Text t = FLTR.getText();
 				for (TextItem ti : t.getTextItems()) {
 					if (ti.getLink() == null) {
-						String s = ti.getTextItemValue().replace(
-								Constants.PARAGRAPH_MARKER, "");
-						if ((!s.isEmpty())
-								&& (terms.getTermFromKey(s.toLowerCase()) == null)) {
+						String s = ti.getTextItemValue().replace(Constants.PARAGRAPH_MARKER, "");
+						if ((!s.isEmpty()) && (terms.getTermFromKey(s.toLowerCase()) == null)) {
 							int index = t.getTextItems().indexOf(ti);
 							t.setMarkIndexStart(index);
 							t.setMarkIndexEnd(index);
 							t.setRangeMarked(true);
-							terms.addTerm(new Term(s, "", t
-									.getMarkedTextSentence(s).replace(
-											Constants.PARAGRAPH_MARKER, ""),
-									"", ts.getStatusCode()));
+							terms.addTerm(
+									new Term(s, "", t.getMarkedTextSentence(s).replace(Constants.PARAGRAPH_MARKER, ""),
+											"", ts.getStatusCode()));
 						}
 					}
 				}
-				Application.getText().matchWithTerms();
+				FLTR.getText().matchWithTerms();
 				frame.getTextPanel().repaint();
 				frame.getTextPanel().requestFocus();
 			}
@@ -181,7 +165,7 @@ public class TextFrameListener implements WindowListener, MouseListener,
 		boolean r;
 		if (e.isPopupTrigger()) {
 			TextPanelPopupMenu popupMenu = frame.getPopupMenu();
-			Text text = Application.getText();
+			Text text = FLTR.getText();
 			Point p1 = e.getPoint();
 			Point p2 = ((JViewport) e.getSource()).getViewPosition();
 			Point p3 = new Point(p1.x + p2.x, p1.y + p2.y);
@@ -192,22 +176,16 @@ public class TextFrameListener implements WindowListener, MouseListener,
 			if (index >= 0) {
 				ti = text.getTextItems().get(index);
 				if ((index + 1) < text.getTextItems().size()) {
-					w2 = ti.getTextItemValue()
-							+ ti.getAfterItemValue()
-							+ text.getTextItems().get(index + 1)
-									.getTextItemValue();
+					w2 = ti.getTextItemValue() + ti.getAfterItemValue()
+							+ text.getTextItems().get(index + 1).getTextItemValue();
 					if ((index + 2) < text.getTextItems().size()) {
-						w3 = w2
-								+ text.getTextItems().get(index + 1)
-										.getAfterItemValue()
-								+ text.getTextItems().get(index + 2)
-										.getTextItemValue();
+						w3 = w2 + text.getTextItems().get(index + 1).getAfterItemValue()
+								+ text.getTextItems().get(index + 2).getTextItemValue();
 					}
 				}
 			}
 			popupMenu.updateMenu(ti, w2, w3);
-			popupMenu.show((Component) e.getSource(), e.getX() + 10,
-					e.getY() + 10);
+			popupMenu.show((Component) e.getSource(), e.getX() + 10, e.getY() + 10);
 			r = true;
 		} else {
 			r = false;
@@ -222,11 +200,11 @@ public class TextFrameListener implements WindowListener, MouseListener,
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			Text text = Application.getText();
+			Text text = FLTR.getText();
 			Point p1 = e.getPoint();
 			Point p2 = ((JViewport) e.getSource()).getViewPosition();
 			Point p3 = new Point(p1.x + p2.x, p1.y + p2.y);
-			int endIndex = Application.getText().getPointedTextItemIndex(p3);
+			int endIndex = FLTR.getText().getPointedTextItemIndex(p3);
 			if ((!text.isRangeMarked()) && (endIndex >= 0)) {
 				text.setRangeMarked(true);
 			}
@@ -249,7 +227,7 @@ public class TextFrameListener implements WindowListener, MouseListener,
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		Text text = Application.getText();
+		Text text = FLTR.getText();
 		Point p1 = e.getPoint();
 		Point p2 = ((JViewport) e.getSource()).getViewPosition();
 		Point p3 = new Point(p1.x + p2.x, p1.y + p2.y);
@@ -257,35 +235,23 @@ public class TextFrameListener implements WindowListener, MouseListener,
 		if (index >= 0) {
 			Term t = text.getTextItems().get(index).getLink();
 			if (t == null) {
-				String s = text.getTextItems().get(index).getTextItemValue()
-						.trim();
+				String s = text.getTextItems().get(index).getTextItemValue().trim();
 				if (!s.equals("")) {
-					frame.getLabinfo().setText(
-							"<html><div style=\"text-align:"
-									+ (Application.getLanguage()
-											.getRightToLeft() ? "right"
-											: "left")
-									+ ";width:"
-									+ String.valueOf(Preferences
-											.getCurrWidthTextPanel()) + ";\">"
-									+ Utilities.escapeHTML(s) + "<br>"
-									+ "(New Word)</div></html>");
+					frame.getLabinfo()
+							.setText("<html><div style=\"text-align:"
+									+ (FLTR.getLanguage().getRightToLeft() ? "right" : "left") + ";width:"
+									+ String.valueOf(Preferences.getCurrWidthTextPanel()) + ";\">"
+									+ Utilities.escapeHTML(s) + "<br>" + "(New Word)</div></html>");
 					Utilities.setComponentOrientation(frame.getLabinfo());
 					Utilities.setHorizontalAlignment(frame.getLabinfo());
 					frame.pack();
 				}
 			} else {
 				frame.getLabinfo()
-						.setText(
-								"<html><div style=\"text-align:"
-										+ (Application.getLanguage()
-												.getRightToLeft() ? "right"
-												: "left")
-										+ ";width:"
-										+ String.valueOf(Preferences
-												.getCurrWidthTextPanel())
-										+ ";\">" + t.displayWithStatusHTML()
-										+ "</div></html>");
+						.setText("<html><div style=\"text-align:"
+								+ (FLTR.getLanguage().getRightToLeft() ? "right" : "left") + ";width:"
+								+ String.valueOf(Preferences.getCurrWidthTextPanel()) + ";\">"
+								+ t.displayWithStatusHTML() + "</div></html>");
 				Utilities.setComponentOrientation(frame.getLabinfo());
 				Utilities.setHorizontalAlignment(frame.getLabinfo());
 				frame.pack();
@@ -299,7 +265,7 @@ public class TextFrameListener implements WindowListener, MouseListener,
 			return;
 		}
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			Text text = Application.getText();
+			Text text = FLTR.getText();
 			Point p1 = e.getPoint();
 			Point p2 = ((JViewport) e.getSource()).getViewPosition();
 			Point p3 = new Point(p1.x + p2.x, p1.y + p2.y);
@@ -316,7 +282,7 @@ public class TextFrameListener implements WindowListener, MouseListener,
 			return;
 		}
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			Text text = Application.getText();
+			Text text = FLTR.getText();
 			Point p1 = e.getPoint();
 			Point p2 = ((JViewport) e.getSource()).getViewPosition();
 			Point p3 = new Point(p1.x + p2.x, p1.y + p2.y);
@@ -329,21 +295,20 @@ public class TextFrameListener implements WindowListener, MouseListener,
 			}
 			frame.getTextPanel().repaint();
 			frame.getTextPanel().requestFocus();
-			String s = text.getMarkedText(dragging).replace(
-					Constants.PARAGRAPH_MARKER, "");
+			String s = text.getMarkedText(dragging).replace(Constants.PARAGRAPH_MARKER, "");
 			if (!s.equals("")) {
-				Term t = Application.getTerms().getTermFromKey(s.toLowerCase());
-				TermFrame termFrame = Application.getTermFrame();
+				Term t = FLTR.getTerms().getTermFromKey(s.toLowerCase());
+				TermFrame termFrame = FLTR.getTermFrame();
 				if (termFrame == null) {
 					termFrame = new TermFrame();
-					Application.setTermFrame(termFrame);
+					FLTR.setTermFrame(termFrame);
 				}
 				if (t == null) {
 					termFrame.startNew(s, text.getMarkedTextSentence(s));
 				} else {
 					termFrame.startEdit(t, text.getMarkedTextSentence(s));
 				}
-				Language lang = Application.getLanguage();
+				Language lang = FLTR.getLanguage();
 				lang.lookupWordInBrowser(s, 3, false);
 				lang.lookupWordInBrowser(s, 2, false);
 				lang.lookupWordInBrowser(s, 1, false);
@@ -361,7 +326,7 @@ public class TextFrameListener implements WindowListener, MouseListener,
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		Terms terms = Application.getTerms();
+		Terms terms = FLTR.getTerms();
 		File f = terms.getExportFile();
 		boolean exportOK = terms.isExportTermsToFileOK();
 		if (!exportOK) {
@@ -374,64 +339,54 @@ public class TextFrameListener implements WindowListener, MouseListener,
 			exportOK = (f.exists() && f.isFile());
 		}
 		if (terms.isDirty()) {
-			if (Utilities.showYesNoQuestion("Your Vocabulary\n"
-					+ terms.getFile().getAbsolutePath()
-					+ "\nhas changed.\n\nSave to disk?", true)) {
+			if (Utilities.showYesNoQuestion(
+					"Your Vocabulary\n" + terms.getFile().getAbsolutePath() + "\nhas changed.\n\nSave to disk?",
+					true)) {
 				String backupFilename = terms.getFile().getAbsolutePath();
 				backupFilename = backupFilename.substring(0,
-						backupFilename.length()
-								- Constants.TEXT_FILE_EXTENSION_LENGTH)
-						+ ".bak";
-				if (Utilities.renameFile(terms.getFile(), (new File(
-						backupFilename))) == false) {
-					Utilities
-							.showErrorMessage("Renaming your Vocabulary for Backup has failed.\n\nSorry, saving your vocabulary seems not be possible.");
+						backupFilename.length() - Constants.TEXT_FILE_EXTENSION_LENGTH) + ".bak";
+				if (Utilities.renameFile(terms.getFile(), (new File(backupFilename))) == false) {
+					Utilities.showErrorMessage(
+							"Renaming your Vocabulary for Backup has failed.\n\nSorry, saving your vocabulary seems not be possible.");
 				} else {
 					if (terms.isSaveTermsToFileOK() == false) {
-						Utilities
-								.showErrorMessage("Writing your Vocabulary to\n"
-										+ terms.getFile().getAbsolutePath()
-										+ "\nhas failed.\n\nSorry, saving your vocabulary seems not be possible.");
+						Utilities.showErrorMessage("Writing your Vocabulary to\n" + terms.getFile().getAbsolutePath()
+								+ "\nhas failed.\n\nSorry, saving your vocabulary seems not be possible.");
 					} else {
 						if (!exportOK) {
-							Utilities
-									.showInfoMessage("Success!\n\nYour Vocabulary has been successfully written to\n"
-											+ terms.getFile().getAbsolutePath()
-											+ "\n\nThe previous version is available in\n"
-											+ backupFilename);
+							Utilities.showInfoMessage("Success!\n\nYour Vocabulary has been successfully written to\n"
+									+ terms.getFile().getAbsolutePath() + "\n\nThe previous version is available in\n"
+									+ backupFilename);
 						} else {
-							Utilities
-									.showInfoMessage("Success!\n\nYour Vocabulary has been successfully written to\n"
-											+ terms.getFile().getAbsolutePath()
-											+ "\n\nThe previous version is available in\n"
-											+ backupFilename
-											+ "\n\nThe Vocabulary has been also exported to\n"
-											+ f.getAbsolutePath());
+							Utilities.showInfoMessage("Success!\n\nYour Vocabulary has been successfully written to\n"
+									+ terms.getFile().getAbsolutePath() + "\n\nThe previous version is available in\n"
+									+ backupFilename + "\n\nThe Vocabulary has been also exported to\n"
+									+ f.getAbsolutePath());
 						}
 					}
 				}
 			}
 		}
 
-		TermFrame termFrame = Application.getTermFrame();
+		TermFrame termFrame = FLTR.getTermFrame();
 		if (termFrame != null) {
 			termFrame.setVisible(false);
 			termFrame.dispose();
-			Application.setTermFrame(null);
+			FLTR.setTermFrame(null);
 		}
 
 		frame.setVisible(false);
 		frame.dispose();
-		Application.setTextFrame(null);
+		FLTR.setTextFrame(null);
 
 		terms = null;
-		Application.setTerms(terms);
+		FLTR.setTerms(terms);
 
-		Text text = Application.getText();
+		Text text = FLTR.getText();
 		text = null;
-		Application.setText(text);
+		FLTR.setText(text);
 
-		Application.getStartFrame().setVisible(true);
+		FLTR.getStartFrame().setVisible(true);
 	}
 
 	@Override

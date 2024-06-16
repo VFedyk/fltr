@@ -1,9 +1,9 @@
 /*
- *  
+ *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
- * 
- * Copyright (c) 2012 FLTR Developers.
- * 
+ *
+ * Copyright © 2012-2019 FLTR Developers.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -22,7 +22,7 @@
  * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 
 package fltrpackage;
@@ -45,7 +45,7 @@ public class Language {
 	public static final String DFTcharSubstitutions = "´='|`='|’='|‘='|′='|‵='";
 
 	public static final String KEYdictionaryURL1 = "dictionaryURL1";
-	public static final String DFTdictionaryURL1 = "http://translate.google.com/?ie=UTF-8&sl=auto&tl=en&text=###";
+	public static final String DFTdictionaryURL1 = "https://translate.google.com/?ie=UTF-8&sl=auto&tl=en&text=###";
 
 	public static final String KEYdictionaryURL2 = "dictionaryURL2";
 	public static final String DFTdictionaryURL2 = "";
@@ -113,18 +113,16 @@ public class Language {
 	public Language(File prefFile) {
 		super();
 		langFile = prefFile;
-		textDir = new File(langFile.getParent(), getLangName()
-				+ Constants.TEXT_DIR_SUFFIX);
+		textDir = new File(langFile.getParent(), getLangName() + Constants.TEXT_DIR_SUFFIX);
 		langPrefs = new Hashtable<String, String>();
 		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					new FileInputStream(prefFile), Constants.ENCODING));
+			BufferedReader in = new BufferedReader(
+					new InputStreamReader(new FileInputStream(prefFile), Constants.ENCODING));
 			String line = in.readLine();
 			if (line != null) {
 				if (line.trim().equalsIgnoreCase(Language.FILE_IDENTIFIER)) {
 					while ((line = in.readLine()) != null) {
-						StringTokenizer st = new StringTokenizer(line,
-								Constants.TAB);
+						StringTokenizer st = new StringTokenizer(line, Constants.TAB);
 						int cnt = st.countTokens();
 						if (cnt >= 2) {
 							String key = st.nextToken().trim();
@@ -145,8 +143,7 @@ public class Language {
 	}
 
 	public String getCharSubstitutions() {
-		return getPref(Language.KEYcharSubstitutions,
-				Language.DFTcharSubstitutions);
+		return getPref(Language.KEYcharSubstitutions, Language.DFTcharSubstitutions);
 	}
 
 	public String getDictionaryURL1() {
@@ -196,30 +193,24 @@ public class Language {
 	}
 
 	public String getLangName() {
-		return langFile.getName().substring(
-				0,
-				langFile.getName().length()
-						- Constants.LANG_SETTINGS_FILE_SUFFIX_LENGTH);
+		return langFile.getName().substring(0,
+				langFile.getName().length() - Constants.LANG_SETTINGS_FILE_SUFFIX_LENGTH);
 	}
 
 	public boolean getMakeCharacterWord() {
-		return getBoolPref(Language.KEYmakeCharacterWord,
-				Language.DFTmakeCharacterWord);
+		return getBoolPref(Language.KEYmakeCharacterWord, Language.DFTmakeCharacterWord);
 	}
 
 	public boolean getOpenAutomaticallyURL1() {
-		return getBoolPref(Language.KEYopenAutomaticallyURL1,
-				Language.DFTopenAutomaticallyURL1);
+		return getBoolPref(Language.KEYopenAutomaticallyURL1, Language.DFTopenAutomaticallyURL1);
 	}
 
 	public boolean getOpenAutomaticallyURL2() {
-		return getBoolPref(Language.KEYopenAutomaticallyURL2,
-				Language.DFTopenAutomaticallyURL2);
+		return getBoolPref(Language.KEYopenAutomaticallyURL2, Language.DFTopenAutomaticallyURL2);
 	}
 
 	public boolean getOpenAutomaticallyURL3() {
-		return getBoolPref(Language.KEYopenAutomaticallyURL3,
-				Language.DFTopenAutomaticallyURL3);
+		return getBoolPref(Language.KEYopenAutomaticallyURL3, Language.DFTopenAutomaticallyURL3);
 	}
 
 	private String getPref(String key, String def) {
@@ -246,8 +237,7 @@ public class Language {
 	}
 
 	public int getStatusFontSize() {
-		return getIntPref(Language.KEYstatusFontSize,
-				Language.DFTstatusFontSize);
+		return getIntPref(Language.KEYstatusFontSize, Language.DFTstatusFontSize);
 	}
 
 	public File getTextDir() {
@@ -279,18 +269,15 @@ public class Language {
 	}
 
 	public String getWordEncodingURL1() {
-		return getPref(Language.KEYwordEncodingURL1,
-				Language.DFTwordEncodingURL1);
+		return getPref(Language.KEYwordEncodingURL1, Language.DFTwordEncodingURL1);
 	}
 
 	public String getWordEncodingURL2() {
-		return getPref(Language.KEYwordEncodingURL2,
-				Language.DFTwordEncodingURL2);
+		return getPref(Language.KEYwordEncodingURL2, Language.DFTwordEncodingURL2);
 	}
 
 	public String getWordEncodingURL3() {
-		return getPref(Language.KEYwordEncodingURL3,
-				Language.DFTwordEncodingURL3);
+		return getPref(Language.KEYwordEncodingURL3, Language.DFTwordEncodingURL3);
 	}
 
 	public boolean isURLset(int linkNo) {
@@ -302,7 +289,7 @@ public class Language {
 		} else if (linkNo == 3) {
 			URL = getDictionaryURL3();
 		}
-		return URL.startsWith(Constants.URL_BEGIN);
+		return (URL.startsWith(Constants.URL_BEGIN_1) || URL.startsWith(Constants.URL_BEGIN_2));
 	}
 
 	public void lookupWordInBrowser(String word, int linkNo, boolean always) {
@@ -327,9 +314,8 @@ public class Language {
 		}
 		try {
 			if (always || autoOpen) {
-				Utilities.openURLInDefaultBrowser(URL.replace(
-						Constants.TERM_PLACEHOLDER,
-						URLEncoder.encode(word.trim(), encoding)));
+				Utilities.openURLInDefaultBrowser(
+						URL.replace(Constants.TERM_PLACEHOLDER, URLEncoder.encode(word.trim(), encoding)));
 			}
 		} catch (Exception ex) {
 		}
@@ -341,51 +327,34 @@ public class Language {
 
 	public void saveFile() {
 		try {
-			PrintWriter out = new PrintWriter(new OutputStreamWriter(
-					new FileOutputStream(langFile), Constants.ENCODING));
+			PrintWriter out = new PrintWriter(
+					new OutputStreamWriter(new FileOutputStream(langFile), Constants.ENCODING));
 			out.print(Language.FILE_IDENTIFIER + Constants.EOL);
-			out.print(Language.KEYcharSubstitutions + Constants.TAB
-					+ getCharSubstitutions() + Constants.EOL);
-			out.print(Language.KEYwordCharRegExp + Constants.TAB
-					+ getWordCharRegExp() + Constants.EOL);
-			out.print(Language.KEYmakeCharacterWord + Constants.TAB
-					+ (getMakeCharacterWord() ? "1" : "0") + Constants.EOL);
-			out.print(Language.KEYremoveSpaces + Constants.TAB
-					+ (getRemoveSpaces() ? "1" : "0") + Constants.EOL);
-			out.print(Language.KEYrightToLeft + Constants.TAB
-					+ (getRightToLeft() ? "1" : "0") + Constants.EOL);
-			out.print(Language.KEYfontName + Constants.TAB + getFontName()
+			out.print(Language.KEYcharSubstitutions + Constants.TAB + getCharSubstitutions() + Constants.EOL);
+			out.print(Language.KEYwordCharRegExp + Constants.TAB + getWordCharRegExp() + Constants.EOL);
+			out.print(Language.KEYmakeCharacterWord + Constants.TAB + (getMakeCharacterWord() ? "1" : "0")
 					+ Constants.EOL);
-			out.print(Language.KEYfontSize + Constants.TAB
-					+ String.valueOf(getFontSize()) + Constants.EOL);
-			out.print(Language.KEYstatusFontName + Constants.TAB
-					+ getStatusFontName() + Constants.EOL);
-			out.print(Language.KEYstatusFontSize + Constants.TAB
-					+ String.valueOf(getStatusFontSize()) + Constants.EOL);
-			out.print(Language.KEYdictionaryURL1 + Constants.TAB
-					+ getDictionaryURL1() + Constants.EOL);
-			out.print(Language.KEYwordEncodingURL1 + Constants.TAB
-					+ getWordEncodingURL1() + Constants.EOL);
-			out.print(Language.KEYopenAutomaticallyURL1 + Constants.TAB
-					+ (getOpenAutomaticallyURL1() ? "1" : "0") + Constants.EOL);
-			out.print(Language.KEYdictionaryURL2 + Constants.TAB
-					+ getDictionaryURL2() + Constants.EOL);
-			out.print(Language.KEYwordEncodingURL2 + Constants.TAB
-					+ getWordEncodingURL2() + Constants.EOL);
-			out.print(Language.KEYopenAutomaticallyURL2 + Constants.TAB
-					+ (getOpenAutomaticallyURL2() ? "1" : "0") + Constants.EOL);
-			out.print(Language.KEYdictionaryURL3 + Constants.TAB
-					+ getDictionaryURL3() + Constants.EOL);
-			out.print(Language.KEYwordEncodingURL3 + Constants.TAB
-					+ getWordEncodingURL3() + Constants.EOL);
-			out.print(Language.KEYopenAutomaticallyURL3 + Constants.TAB
-					+ (getOpenAutomaticallyURL3() ? "1" : "0") + Constants.EOL);
-			out.print(Language.KEYexportTemplate + Constants.TAB
-					+ getExportTemplate() + Constants.EOL);
-			out.print(Language.KEYexportStatuses + Constants.TAB
-					+ getExportStatuses() + Constants.EOL);
-			out.print(Language.KEYdoExport + Constants.TAB
-					+ (getDoExport() ? "1" : "0") + Constants.EOL);
+			out.print(Language.KEYremoveSpaces + Constants.TAB + (getRemoveSpaces() ? "1" : "0") + Constants.EOL);
+			out.print(Language.KEYrightToLeft + Constants.TAB + (getRightToLeft() ? "1" : "0") + Constants.EOL);
+			out.print(Language.KEYfontName + Constants.TAB + getFontName() + Constants.EOL);
+			out.print(Language.KEYfontSize + Constants.TAB + String.valueOf(getFontSize()) + Constants.EOL);
+			out.print(Language.KEYstatusFontName + Constants.TAB + getStatusFontName() + Constants.EOL);
+			out.print(Language.KEYstatusFontSize + Constants.TAB + String.valueOf(getStatusFontSize()) + Constants.EOL);
+			out.print(Language.KEYdictionaryURL1 + Constants.TAB + getDictionaryURL1() + Constants.EOL);
+			out.print(Language.KEYwordEncodingURL1 + Constants.TAB + getWordEncodingURL1() + Constants.EOL);
+			out.print(Language.KEYopenAutomaticallyURL1 + Constants.TAB + (getOpenAutomaticallyURL1() ? "1" : "0")
+					+ Constants.EOL);
+			out.print(Language.KEYdictionaryURL2 + Constants.TAB + getDictionaryURL2() + Constants.EOL);
+			out.print(Language.KEYwordEncodingURL2 + Constants.TAB + getWordEncodingURL2() + Constants.EOL);
+			out.print(Language.KEYopenAutomaticallyURL2 + Constants.TAB + (getOpenAutomaticallyURL2() ? "1" : "0")
+					+ Constants.EOL);
+			out.print(Language.KEYdictionaryURL3 + Constants.TAB + getDictionaryURL3() + Constants.EOL);
+			out.print(Language.KEYwordEncodingURL3 + Constants.TAB + getWordEncodingURL3() + Constants.EOL);
+			out.print(Language.KEYopenAutomaticallyURL3 + Constants.TAB + (getOpenAutomaticallyURL3() ? "1" : "0")
+					+ Constants.EOL);
+			out.print(Language.KEYexportTemplate + Constants.TAB + getExportTemplate() + Constants.EOL);
+			out.print(Language.KEYexportStatuses + Constants.TAB + getExportStatuses() + Constants.EOL);
+			out.print(Language.KEYdoExport + Constants.TAB + (getDoExport() ? "1" : "0") + Constants.EOL);
 			out.close();
 		} catch (Exception e) {
 		}

@@ -1,9 +1,9 @@
 /*
- *  
+ *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
- * 
- * Copyright (c) 2012 FLTR Developers.
- * 
+ *
+ * Copyright © 2012-2019 FLTR Developers.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -22,7 +22,7 @@
  * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 
 package fltrpackage;
@@ -53,7 +53,7 @@ public class TermFrame extends JFrame {
 	private MultiLineTextField tfRomanization;
 	private MultiLineTextField tfSentence;
 	private JRadioButton[] rbStatus;
-	private JComboBox cbSimilar;
+	private JComboBox<ComboBoxItem> cbSimilar;
 	private JButton butDelete;
 	private JButton butSave;
 	private JButton butLookup1;
@@ -80,7 +80,7 @@ public class TermFrame extends JFrame {
 		mainPanel.add(tfTerm.getTextAreaScrollPane(), "wrap");
 
 		mainPanel.add(new JLabel("Similar Terms:"), "right");
-		cbSimilar = new JComboBox(new Vector<ComboBoxItem>());
+		cbSimilar = new JComboBox<ComboBoxItem>(new Vector<ComboBoxItem>());
 		cbSimilar.setEditable(false);
 		cbSimilar.setMaximumRowCount(Constants.MAX_SIMILAR_TERMS + 1);
 		mainPanel.add(cbSimilar, "wrap");
@@ -104,9 +104,8 @@ public class TermFrame extends JFrame {
 			rbStatus[i] = new JRadioButton(String.valueOf(i + 1));
 			rbStatus[i].addActionListener(listener);
 			bgStatus.add(rbStatus[i]);
-			mainPanel.add(rbStatus[i], "gapbottom 10px"
-					+ (i == 0 ? ", split"
-							: (i == (rbStatus.length - 1) ? ", wrap" : "")));
+			mainPanel.add(rbStatus[i],
+					"gapbottom 10px" + (i == 0 ? ", split" : (i == (rbStatus.length - 1) ? ", wrap" : "")));
 		}
 		rbStatus[5].setText("Ign");
 		rbStatus[6].setText("WKn");
@@ -115,23 +114,20 @@ public class TermFrame extends JFrame {
 		butDelete.addActionListener(listener);
 		mainPanel.add(butDelete, "left");
 
-		Language lang = Application.getLanguage();
+		Language lang = FLTR.getLanguage();
 
 		butLookup1 = new JButton("Dict1");
-		butLookup1.setEnabled(lang.getDictionaryURL1().startsWith(
-				Constants.URL_BEGIN));
+		butLookup1.setEnabled(lang.isURLset(1));
 		butLookup1.addActionListener(listener);
 		mainPanel.add(butLookup1, "split 4, right");
 
 		butLookup2 = new JButton("Dict2");
-		butLookup2.setEnabled(lang.getDictionaryURL2().startsWith(
-				Constants.URL_BEGIN));
+		butLookup2.setEnabled(lang.isURLset(2));
 		butLookup2.addActionListener(listener);
 		mainPanel.add(butLookup2, "center");
 
 		butLookup3 = new JButton("Dict3");
-		butLookup3.setEnabled(lang.getDictionaryURL3().startsWith(
-				Constants.URL_BEGIN));
+		butLookup3.setEnabled(lang.isURLset(3));
 		butLookup3.addActionListener(listener);
 		mainPanel.add(butLookup3, "left");
 
@@ -148,14 +144,12 @@ public class TermFrame extends JFrame {
 		setResizable(false);
 
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(Preferences.getCurrXPosTermWindow((d.width - this
-				.getSize().width) / 2), Preferences
-				.getCurrYPosTermWindow((d.height - this.getSize().height) / 2));
+		this.setLocation(Preferences.getCurrXPosTermWindow((d.width - this.getSize().width) / 2),
+				Preferences.getCurrYPosTermWindow((d.height - this.getSize().height) / 2));
 		getContentPane().addHierarchyBoundsListener(listener);
 
 		if (!Utilities.isMac()) {
-			setIconImage(Toolkit.getDefaultToolkit().getImage(
-					this.getClass().getResource(Constants.ICONPATH)));
+			setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource(Constants.ICONPATH)));
 		}
 
 	}
@@ -234,8 +228,7 @@ public class TermFrame extends JFrame {
 		tfTranslation.getTextArea().setText(t.getTranslation());
 		tfRomanization.getTextArea().setText(t.getRomanization());
 		if (t.getSentence().trim().equals("")) {
-			if ((!Preferences.getCurrText().equals("<Vocabulary>"))
-					&& (!sentence.equals(""))) {
+			if ((!Preferences.getCurrText().equals("<Vocabulary>")) && (!sentence.equals(""))) {
 				tfSentence.getTextArea().setText(sentence);
 				tfSentence.getTextArea().setForeground(new Color(0, 0, 128));
 			} else {
@@ -246,19 +239,16 @@ public class TermFrame extends JFrame {
 		}
 		setRbStatus(t.getStatus());
 		cbSimilar.removeAllItems();
-		ArrayList<Term> list = Application.getTerms().getNearlyEquals(
-				t.getTerm(), Constants.MAX_SIMILAR_TERMS);
+		ArrayList<Term> list = FLTR.getTerms().getNearlyEquals(t.getTerm(), Constants.MAX_SIMILAR_TERMS);
 		boolean ok = false;
 		for (Term tt : list) {
 			if (!tt.equals(t)) {
 				ok = true;
-				cbSimilar.addItem(new ComboBoxItem(tt.displayWithoutStatus(),
-						Constants.MAX_SIMILAR_TERMS_LENGTH));
+				cbSimilar.addItem(new ComboBoxItem(tt.displayWithoutStatus(), Constants.MAX_SIMILAR_TERMS_LENGTH));
 			}
 		}
 		if (!ok) {
-			cbSimilar.addItem(new ComboBoxItem("[None]",
-					Constants.MAX_SIMILAR_TERMS_LENGTH));
+			cbSimilar.addItem(new ComboBoxItem("[None]", Constants.MAX_SIMILAR_TERMS_LENGTH));
 		}
 		pack();
 		setVisible(true);
@@ -282,17 +272,14 @@ public class TermFrame extends JFrame {
 		}
 		setRbStatus(TermStatus.Unknown);
 		cbSimilar.removeAllItems();
-		ArrayList<Term> list = Application.getTerms().getNearlyEquals(term,
-				Constants.MAX_SIMILAR_TERMS);
+		ArrayList<Term> list = FLTR.getTerms().getNearlyEquals(term, Constants.MAX_SIMILAR_TERMS);
 		boolean ok = false;
 		for (Term tt : list) {
 			ok = true;
-			cbSimilar.addItem(new ComboBoxItem(tt.displayWithoutStatus(),
-					Constants.MAX_SIMILAR_TERMS_LENGTH));
+			cbSimilar.addItem(new ComboBoxItem(tt.displayWithoutStatus(), Constants.MAX_SIMILAR_TERMS_LENGTH));
 		}
 		if (!ok) {
-			cbSimilar.addItem(new ComboBoxItem("[None]",
-					Constants.MAX_SIMILAR_TERMS_LENGTH));
+			cbSimilar.addItem(new ComboBoxItem("[None]", Constants.MAX_SIMILAR_TERMS_LENGTH));
 		}
 		pack();
 		setVisible(true);

@@ -1,9 +1,9 @@
 /*
- *  
+ *
  * Foreign Language Text Reader (FLTR) - A Tool for Language Learning.
- * 
- * Copyright (c) 2012 FLTR Developers.
- * 
+ *
+ * Copyright © 2012-2019 FLTR Developers.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
  * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -22,7 +22,7 @@
  * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 
 package fltrpackage;
@@ -64,10 +64,9 @@ public class NewTextDialogListener implements ActionListener {
 				return;
 			}
 			if (!Utilities.checkFileNameOK(textName)) {
-				Utilities
-						.showErrorMessage("Text name contains invalid characters \\, /, :, \", *, ?,\n<, >, |, NEWLINE, TAB or begins with '.'.\nThis has been corrected, please check!");
-				frame.getTfTextName().setText(
-						Utilities.replaceNonFileNameCharacters(textName));
+				Utilities.showErrorMessage(
+						"Text name contains invalid characters \\, /, :, \", *, ?,\n<, >, |, NEWLINE, TAB or begins with '.'.\nThis has been corrected, please check!");
+				frame.getTfTextName().setText(Utilities.replaceNonFileNameCharacters(textName));
 				frame.getTfTextName().requestFocusInWindow();
 				return;
 			}
@@ -77,13 +76,11 @@ public class NewTextDialogListener implements ActionListener {
 			String currLang = Preferences.getCurrLang();
 			File dir = new File(currMainDir);
 			if (dir.isDirectory()) {
-				File langdir = new File(dir, currLang
-						+ Constants.TEXT_DIR_SUFFIX);
+				File langdir = new File(dir, currLang + Constants.TEXT_DIR_SUFFIX);
 				if (langdir.isDirectory()) {
-					File langFile = new File(dir, currLang
-							+ Constants.LANG_SETTINGS_FILE_SUFFIX);
+					File langFile = new File(dir, currLang + Constants.LANG_SETTINGS_FILE_SUFFIX);
 					Language lang = new Language(langFile);
-					Application.setLanguage(lang);
+					FLTR.setLanguage(lang);
 					File f = new File(lang.getTextDir(), textName + ".txt");
 					if (!Utilities.createNewFile(f)) {
 						Utilities.showErrorMessage("Text Name exists.");
@@ -94,8 +91,7 @@ public class NewTextDialogListener implements ActionListener {
 						text = text.replace(Constants.UNIX_EOL, Constants.EOL);
 					}
 					Utilities.writeStringIntoFile(f, text);
-					Utilities.showInfoMessage("Text successfully created:\n"
-							+ f.getAbsolutePath());
+					Utilities.showInfoMessage("Text successfully created:\n" + f.getAbsolutePath());
 					Preferences.putCurrText(textName);
 				}
 			} else {
@@ -104,7 +100,7 @@ public class NewTextDialogListener implements ActionListener {
 			frame.setResult(1);
 			frame.setVisible(false);
 			frame.dispose();
-			Application.getStartFrame().setDataAndPack();
+			FLTR.getStartFrame().setDataAndPack();
 		}
 	}
 
